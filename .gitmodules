@@ -4,3 +4,6 @@
 [submodule "bundle/YankRing"]
 	path = bundle/YankRing
 	url = https://github.com/vim-scripts/YankRing.vim.git
+[submodule "bundle/vim_rainbow"]
+	path = bundle/vim_rainbow
+	url = https://github.com/chrismetcalf/vim-rainbow.git
