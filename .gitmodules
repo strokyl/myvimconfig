@@ -1,0 +1,6 @@
+[submodule "YankRing.vim"]
+	path = YankRing.vim
+	url = https://github.com/vim-scripts/YankRing.vim.git
+[submodule "bundle/YankRing"]
+	path = bundle/YankRing
+	url = https://github.com/vim-scripts/YankRing.vim.git
