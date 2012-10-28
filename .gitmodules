@@ -7,3 +7,6 @@
 [submodule "bundle/vim_rainbow"]
 	path = bundle/vim_rainbow
 	url = https://github.com/chrismetcalf/vim-rainbow.git
+[submodule "bundle/guicolorscheme"]
+	path = bundle/guicolorscheme
+	url = https://github.com/vim-scripts/guicolorscheme.vim.git
