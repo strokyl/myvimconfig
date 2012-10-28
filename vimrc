@@ -2,17 +2,18 @@ syntax enable
 syntax on
 filetype plugin indent on
 call pathogen#infect()
-set background=dark
 if (&t_Co == 256 || &t_Co == 88) && !has('gui_running') &&
   \ filereadable(expand("$HOME/.vim/bundle/guicolorscheme/plugin/guicolorscheme.vim"))
   " Use the guicolorscheme plugin to makes 256-color or 88-color
   " terminal use GUI colors rather than cterm colors.
-  runtime! plugin/guicolorscheme.vim
-  GuiColorScheme mustang
+  " runtime! plugin/guicolorscheme.vim
+  " GuiColorScheme mustang
+  colorscheme mustang
 else
   " For 8-color 16-color terminals or for gvim, just use the
   " regular :colorscheme command.
   colorscheme solarized
+    set background=dark
 endif
 set nocompatible
 set modelines=0

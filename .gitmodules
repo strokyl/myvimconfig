@@ -10,3 +10,6 @@
 [submodule "bundle/guicolorscheme"]
 	path = bundle/guicolorscheme
 	url = https://github.com/vim-scripts/guicolorscheme.vim.git
+[submodule "bundle/sparkup"]
+	path = bundle/sparkup
+	url = https://github.com/rstacruz/sparkup.git
