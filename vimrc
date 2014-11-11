@@ -43,6 +43,7 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+au FileType javascript call JavaScriptFold()
 
 " Show invisible character
 " set list
