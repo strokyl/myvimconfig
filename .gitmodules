@@ -37,3 +37,9 @@
 [submodule "bundle/autoclose"]
 	path = bundle/autoclose
 	url = https://github.com/Townk/vim-autoclose
+[submodule "bundle/javascript-syntax"]
+	path = bundle/javascript-syntax
+	url = https://github.com/jelera/vim-javascript-syntax
+[submodule "bundle/nodejs-complete"]
+	path = bundle/nodejs-complete
+	url = https://github.com/myhere/vim-nodejs-complete
