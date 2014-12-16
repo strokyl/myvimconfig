@@ -38,9 +38,15 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
 
+au FileType javascript call JavaScriptFold()
 
-
+command E :Explore
+let g:netrw_liststyle=3
 " Show invisible character
 " set list
 " set listchars=tab:▸\ ,eol:¬

@@ -44,7 +44,6 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
 au FileType javascript call JavaScriptFold()
-/
 
 command E :Explore
 let g:netrw_liststyle=3

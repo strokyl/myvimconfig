@@ -43,3 +43,6 @@
 [submodule "bundle/nodejs-complete"]
 	path = bundle/nodejs-complete
 	url = https://github.com/myhere/vim-nodejs-complete
+[submodule "bundle/autopairs"]
+	path = bundle/autopairs
+	url = http://github.com/jiangmiao/auto-pairs.git
