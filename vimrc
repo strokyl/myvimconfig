@@ -62,3 +62,6 @@ let g:netrw_liststyle=3
 " set listchars=tab:▸\ ,eol:¬
 "
 set backupdir=~/.vim/backup
+set noswapfile
+
+map <Leader>t :CtrlP<CR>
