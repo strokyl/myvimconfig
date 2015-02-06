@@ -1,8 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/'
-let g:netrw_dirhist_2='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/htdocs/fr/g_mes_infos'
-let g:netrw_dirhist_3='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/htdocs/fr'
-let g:netrw_dirhist_4='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/htdocs'
-let g:netrw_dirhist_5='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/htdocs/technical'
-let g:netrw_dirhist_6='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/htdocs/technical/js'
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA'
+let g:netrw_dirhist_2='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/templatedata'
+let g:netrw_dirhist_3='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/templatedata/Manager'
+let g:netrw_dirhist_4='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/templatedata/Manager/actualites'
+let g:netrw_dirhist_5='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/templatedata/Manager/actualites/data'
+let g:netrw_dirhist_6='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA'
+let g:netrw_dirhist_7='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/templatedata/Manager/actualites/presentation'
+let g:netrw_dirhist_8='/cygdrive/c/IWTemp/qvidcwcslx01.france.airfrance.fr/cache/Intranet/main/SiteUnitaire/Manager/WORKAREA/Contrib/admin/includeTpl'

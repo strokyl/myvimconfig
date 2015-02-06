@@ -45,8 +45,20 @@ au Syntax * RainbowParenthesesLoadBraces
 
 au FileType javascript call JavaScriptFold()
 
+imap <C-h> <esc>i
+imap <C-j> <down>
+imap <C-k> <up>
+imap <C-l> <right>
+
+" map CTRL-E to end-of-line (insert mode)
+imap <C-e> <esc>$i<right>
+" map CTRL-A to beginning-of-line (insert mode)
+imap <C-a> <esc>0i
+
 command E :Explore
 let g:netrw_liststyle=3
 " Show invisible character
 " set list
 " set listchars=tab:▸\ ,eol:¬
+"
+set backupdir=~/.vim/backup
