@@ -1,0 +1,29 @@
+MYACTU-58: Nouveaux champs: partie IHM
+
+Création d'une directive mydatepicker
+Task-Url: https://www9.klm.com/corporate/pse/jira/browse/MYACTU-58
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    Luc DUZAN <luduzan-ext@airfrance.fr>
+# Committer: U-FRANCE-AD\t703051 <t703051@AFR636559.france.ad.airfrance.fr>
+#
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD^1 <file>..." to unstage)
+#
+#	new file:   ../../../../../js/ngwis/directives/datepicker.js
+#	modified:   index.html
+#	renamed:    js/libs/ui-bootstrap-tpls-3.3.0.min.js -> js/libs/ui-bootstrap-tpls-0.12.0.min.js
+#	modified:   js/ngwis/controllers/EditActuCtrl.js
+#	modified:   js/ngwis/directives/directives.js
+#	new file:   js/ngwis/directives/mydatepicker.js
+#	new file:   template/mydatepicker.html
+#	modified:   views/actuForm.html
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	.svn
+#	js/ngwis/controllers/.EditActuCtrl.js.un~

@@ -1,0 +1,327 @@
+/**
+ * 
+ */
+var EditActuCtrl = function ($scope, $routeParams, $translate, $timeout, $location, $window, $modal, $filter, FileUploader, BrancheService, ActuService, ImageService) {
+	this.scope = $scope;
+
+	$scope.brancheName = $routeParams.brancheName;
+	//on est obligé de faire le replace à cause d'un beug sur spring rest
+	$scope.previousVignetteStack = [];
+	$scope.previousImageStack = [];
+	
+	
+
+	//Config pour tiny 4
+	$scope.tinymceOptions = this.tinymceOptions;
+	
+	var imagePromise = $scope.images = ImageService.getAll({brancheName:$routeParams.brancheName});
+
+	$scope.themes = []
+	
+        //TODO : delete
+	//the format date of angular ui date picket is not the same than the date excepted by Spring
+	//this is the reason why we have to variable between for the date
+	//$scope.$watch("actuDate", function(newDate, oldDate) {
+		//$scope.actu.actuDate = $filter('date')(newDate, "yyyy-MM-dd");
+	//});
+
+	$scope.startWait();
+	var themesPromise =  BrancheService.themes({brancheName:$routeParams.brancheName});
+	
+	themesPromise.$then(function (data) {
+
+        for (var i = 0; i < data.data.length; i++) {
+            $scope.themes.push(data.data[i]);
+        };
+
+		if(!$scope.actu.theme) {
+			$scope.actu.theme = data.data[0];
+		}
+		$scope.endWait();
+	});
+
+	$scope.startWait();
+	var unitSitesPromise =  BrancheService.unitsites({brancheName:$routeParams.brancheName});
+	
+    $scope.unitSites = [];
+	unitSitesPromise.$then(function (data) {
+        for (var i = 0; i < data.data.length; i++) {
+            $scope.unitSites.push(data.data[i]);
+        };
+		if(!$scope.actu.unitSite) {
+			$scope.actu.unitSite = data.data[0];
+		}
+		$scope.endWait();
+	});
+	
+
+	
+	this.scope.saveChange = angular.bind(this, this.saveChange, ActuService, $translate, $location);
+	this.scope.publish = angular.bind(this, this.publish, ActuService, $translate, $location);
+	this.scope.apercu = angular.bind(this, this.apercu, ActuService, $translate, $location, $window);
+	this.scope.cancel = angular.bind(this, this.cancel, $location);
+	this.scope.openGallerie = angular.bind(this, this.openGallerie, $modal);
+	
+	
+	//scope value for ng-repeat that serve to does not repeat html in multilangage form
+	var lang = this.scope.lang = [{id:'fr', lang:'Français'}, {id:'en', lang: 'Anglais'}];
+
+	var multiLangField = ['titre',
+	                        'texteRiche',
+	                        'chapeau',
+	                        'image'];
+	
+	
+	var capitalize = function(s) {
+	    return s[0].toUpperCase() + s.slice(1);
+	};
+
+	var i, j, field, fieldName, l;
+
+    var buildLangId = function(fieldName) {
+        var field = [];
+		for (j = 0; j < lang.length; j++) {
+			l = lang[j].id;
+			field.push({
+				lang:l,
+				id:fieldName+capitalize(l)
+			});
+		}
+        return field;
+    }
+
+	for (i = 0; i < multiLangField.length; i++) {
+		var fieldName = multiLangField[i];
+		this.scope[fieldName] = buildLangId(fieldName);
+	}
+	
+	this.scope.dateOpened = false;
+	this.scope.advanced = false;
+
+    var form = this.scope.form = {
+        lang : lang,
+        fields : [
+            {
+                id : buildLangId('titre'),
+                label : "Titre",
+                type: "text"
+            },
+            {
+                id : "actuDate",
+                label : "Date",
+                type : "date",
+            },
+            {
+                id: "theme",
+                label: "Theme",
+                type : "liste",
+                choices : this.scope.themes
+            },
+            {
+                id: "unitSite",
+                label: "Unit site",
+                type : "liste",
+                choices : this.scope.unitSites;
+            },
+            {
+                id : buildLangId("texteRiche"),
+                label : "Corps",
+                type : "html"
+            },
+            {
+                id : buildLangId("image"),
+                label : "Image",
+                type : "image"
+            },
+            {
+                id : "advanced",
+                label : "Mode avancé",
+                type : "checkbox"
+            },
+            {
+                id : buildLangId("chapeau"),
+                label : "Chapeau",
+                type : "textarea",
+                displayIf : "advanced"
+            },
+            {
+                id : "une",
+                label:  "Une",
+                type : "checkbox",
+                displayIf : "advanced"
+            },
+            {
+                id : "hot",
+                label : "Hot",
+                type : "checkbox",
+                displayIf : "advanced"
+            }
+        ]
+    };
+}
+
+
+EditActuCtrl.prototype.openGallerie = function($modal, field) {
+	var scope = this.scope;
+	var modalInstance = $modal.open({
+		templateUrl :'template/gallery.html',
+		controller : 'GalleryCtrl',
+		size: "lg",
+		resolve: {
+			images: function () {
+				return scope.images;
+			},
+			uploadUrl: function () {
+				return "resources/images/" + scope.brancheName;
+			}
+		}
+	});
+	
+	modalInstance.result.then(function(selectedImage) {
+		console.log("chooseVignette", image);
+		scope.actu[field] = selectedImage.url;
+	});
+};
+
+EditActuCtrl.prototype.goBackToList = function($location) {
+	$location.path("/site/"+this.scope.brancheName);
+};
+
+EditActuCtrl.prototype.saveChange = function (ActuService, $translate, $location) {
+		var scope = this.scope;
+		scope.startWait();
+		var that = this;
+
+		ActuService.put({brancheName:this.scope.brancheName}, this.scope.actu).$then(function() {
+			scope.flashMessage($translate("actu.updated", {'actuFile': scope.actu.actuFile, 'brancheName' :scope.brancheName}));
+			scope.endWait();
+			that.goBackToList($location);
+			scope.changeToSave = false;
+			scope.actu.draft = true;
+		}, function(error) {
+			scope.endWait();
+			scope.onError(resp,this.scope.columns);
+		});
+
+	};
+
+EditActuCtrl.prototype.apercu = function (ActuService, $translate, $location, $window) {
+		var scope = this.scope;
+		scope.startWait();
+		var actuFile = scope.actuFile || scope.actu.actuFile;
+		console.log("article", actuFile);
+		ActuService.put({brancheName:scope.brancheName}, scope.actu).$then(function() {
+			scope.flashMessage($translate("actu.updated", {'actuFile': actuFile, 'brancheName' :scope.brancheName}));
+            scope.changeToSave = false;
+            ActuService.getOverview({brancheName:scope.brancheName, actuFile:actuFile}, function(data) {
+                var url = data.url;
+                scope.endWait();
+                $window.open(url);
+            }, function(error) {
+                console.log(error)
+                scope.endWait();
+            scope.onError(error);
+            });
+		}, function(error) {
+			scope.endWait();
+			scope.onError(resp,this.scope.columns);
+		});
+
+	};
+
+EditActuCtrl.prototype.publish = function (ActuService, $translate, $location) {
+		var scope = this.scope;
+		scope.startWait();
+		var that = this;
+		var actuFile = scope.actuFile || scope.actu.actuFile;
+		ActuService.put({brancheName:scope.brancheName}, scope.actu).$then(function() {
+			scope.flashMessage($translate("actu.updated", {'actuFile': actuFile, 'brancheName' :scope.brancheName}));
+			scope.changeToSave = false;
+		   ActuService.publish({brancheName:scope.brancheName, actuFile:actuFile}, null, function(data) {
+			   scope.flashMessage($translate("actu.publish", {'actuFile': actuFile, 'brancheName' :scope.brancheName}));
+			   var url = data.url;
+			   scope.endWait();
+			   scope.actu.draft = false;
+			   that.goBackToList($location);
+		   }, function(error) {
+			   console.log(error)
+			   scope.endWait();
+			   scope.onError(error);
+		   });
+		}, function(error) {
+			scope.endWait();
+			scope.onError(resp,this.scope.columns);
+		});
+
+	};
+
+//reviens à la liste des actualités
+EditActuCtrl.prototype.cancel = function ($location) {
+	this.goBackToList($location);
+};
+
+EditActuCtrl.prototype.tinymceOptions = {
+			"content_css" : "css/DCT_VF_V3AF.css",
+			"theme_advanced_more_colors" : false, 
+			"style_formats":[
+	                 	{"title" : "1- Sur tire paragraphe couleur theme", "selector":"p", "classes":"surtitreParagraphe"},
+	                	{"title" : "2- Titre paragraphe bleu AF apres le surtitre", "selector":"p", "classes":"titreParagraphe"},
+	                	{"title" : "3- Sous titre paragraphe bleu AF", "selector":"p", "classes":"sousTitreParagraphe"},
+	                	{"title" : "4- Texte normal", "selector":"p", "classes":"texteNormal"},
+	                	{"title" : "5- Texte en exergue", "selector":"p", "classes":"exergue"},
+	                	{"title" : "Couleur texte normal", "selector":"p", "classes":"tx_c1"},
+	                	{"title" : "Couleur Bleu AF", "selector":"p", "classes":"tx_c2"},
+	                	{"title" : "Theme Compagnie (blue)", "selector":"p", "classes":"tx_c3"},
+	                	{"title" : "Theme Metier (red)", "selector":"p", "classes":"tx_c4"},
+	                	{"title" : "Theme Pratique (cyan)", "selector":"p", "classes":"tx_c5"},
+	                	{"title" : "Theme Parcours (yellow)", "selector":"p", "classes":"tx_c6"},
+	                	{"title" : "Theme Entre nous (green)", "selector":"p", "classes":"tx_c7"},
+	                	{"title" : "Theme Environnement (purple)", "selector":"p", "classes":"tx_c8"},
+	                	{"title" : "Fond blanc", "selector":"p", "classes":"Fond_blanc"},
+	                	{"title" : "Fond vif rouge", "selector":"p", "classes":"bg_v1"},
+	                	{"title" : "Fond vif bordeau", "selector":"p", "classes":"bg_v2"},
+	                	{"title" : "Fond vif violet", "selector":"p", "classes":"bg_v3"},
+	                	{"title" : "Fond vif bleu 1", "selector":"p", "classes":"bg_v4"},
+	                	{"title" : "Fond vif bleu 2", "selector":"p", "classes":"bg_v5"},
+	                	{"title" : "Fond vif turquoise", "selector":"p", "classes":"bg_v6"},
+	                	{"title" : "Fond vif kaki", "selector":"p", "classes":"bg_v7"},
+	                	{"title" : "Fond vif marron", "selector":"p", "classes":"bg_v8"},
+	                	{"title" : "Fond vif jaune", "selector":"p", "classes":"bg_v9"},
+	                	{"title" : "Fond secondaire bleu 1", "selector":"p", "classes":"bg_c1"},
+	                	{"title" : "Fond secondaire turquoise", "selector":"p", "classes":"bg_c2"},
+	                	{"title" : "Fond secondaire gris 1", "selector":"p", "classes":"bg_c3"},
+	                	{"title" : "Fond secondaire bleu 2", "selector":"p", "classes":"bg_c4"},
+	                	{"title" : "Fond secondaire bleu 3", "selector":"p", "classes":"bg_c5"},
+	                	{"title" : "Fond secondaire gris 2", "selector":"p", "classes":"bg_c6"},
+	                	{"title" : "Fond secondaire gris 3", "selector":"p", "classes":"bg_c7"},
+	                	{"title" : "Fond secondaire beige 1", "selector":"p", "classes":"bg_c8"},
+	                	{"title" : "Fond secondaire beige 2", "selector":"p", "classes":"bg_c9"},
+	                	{"title" : "Fond secondaire gris 4", "selector":"p", "classes":"bg_c10"},
+	                	{"title" : "Fond secondaire rose", "selector":"p", "classes":"bg_c11"},
+	                	{"title" : "Fond secondaire orange", "selector":"p", "classes":"bg_c12"},
+	                	{"title" : "Fond secondaire vert 1", "selector":"p", "classes":"bg_c13"},
+	                	{"title" : "Fond secondaire vert 2", "selector":"p", "classes":"bg_c14"}
+	                ],
+			"invalid_elements" : "script,object,embed,iframe,pres,div,layer,h1,h2,h3,h4,h5",
+			"extended_valid_elements" : "td[abbr|align<center?char?justify?left?right|axis|bgcolor|char|charoff|class"
+			  +"|colspan|dir<ltr?rtl|headers|height|id|lang|nowrap<nowrap|onclick"
+			  +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+			  +"|onmouseout|onmouseover|onmouseup|rowspan|scope<col?colgroup?row?rowgroup"
+			  +"|style|title|valign<baseline?bottom?middle?top|width],"
+			  +"th[abbr|align<center?char?justify?left?right|axis|bgcolor|char|charoff|class"
+			  +"|colspan|dir<ltr?rtl|headers|height|id|lang|nowrap<nowrap|onclick"
+			  +"|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove"
+			  +"|onmouseout|onmouseover|onmouseup|rowspan|scope<col?colgroup?row?rowgroup"
+			  +"|style|title|valign<baseline?bottom?middle?top|width]",
+
+			"width" : "500", 
+			"height" : "200", 
+			//IntraBrowserImage, IntraBrowserLink, advimage
+			"plugins" : "print,advimage,IntraRemoveEmptyParagraph,IntraInsertTableV03, searchreplace, link, table, charmap", 
+			"menubar" : false,
+			//intraBrowserImage, intraBrowserLink, image
+			/*"toolbarRow"*/ "toolbar" : ["code,cut,copy,paste,pasteword,searchreplace,print,|,undo,redo,|,link,unlink,|,table,IntraInsertTableV03,|"
+			,",styleselect,bold,italic,underline,|,alignleft,aligncenter,alignright,alignfull,|,charmap,|,bullist,numlist,IntraRemoveEmptyParagraph"],
+			"paste_auto_cleanup_on_paste" : true,
+			"paste_remove_styles" : false
+		};

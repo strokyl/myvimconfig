@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr_FR" ng-app="Ngwis" ng-controller="GlobalCtrl">
+<head>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta charset="utf-8">
+
+
+<!-- JQuery -->
+<script src="js/libs/jquery-1.11.2.min.js"></script>
+<script src="js/libs/jquery-ui-1.10.0.custom.js"></script>
+
+<!-- Angular et modules -->
+<!-- <script src="js/libs/angular-1.1.5.js"></script> -->
+<!-- <script src="js/libs/angular-1.2.min.js"></script> -->
+<script src="js/libs/angular-1.2.js"></script>
+<script src="js/libs/angular-route.min.js"></script>
+<script src="js/libs/angular-resource-1.1.5.js"></script>
+<script src="js/libs/angular-translate-1.1.1.js"></script>
+<script src="js/libs/ui-bootstrap-tpls-0.12.0.min.js"></script>
+<script src="js/libs/bootstrap-filestyle.min.js"></script>
+<script src="js/libs/recursion.js"></script>
+
+<!--  TinyMCE -->
+<script type="text/javascript" src="js/libs/tinymce4/tinymce.min.js"></script>
+<script type="text/javascript" src="js/libs/ui-tinymce.js"></script>
+
+<!-- Bootstrap -->
+<script src="js/libs/bootstrap/js/bootstrap.js"></script>
+
+<!-- Angular pack langues -->
+<script src="js/ngwis/i18n/ngwisfr_FR.js"></script>
+
+<!-- Angular : application -->
+<script src="js/ngwis/application.js"></script>
+<!-- Angular : services -->
+<script src="js/ngwis/services/services.js"></script>
+
+<script src="js/ngwis/services/uiTinymceConfig.js"></script>
+
+
+<!-- Angular : contrôleurs -->
+<script src="js/ngwis/controllers/GlobalCtrl.js"></script>
+<script src="js/ngwis/controllers/MenuHListCtrl.js"></script>
+<script src="js/ngwis/controllers/SiteCtrl.js"></script>
+<script src="js/ngwis/controllers/EditActuCtrl.js"></script>
+<script src="js/ngwis/controllers/UpdateActuCtrl.js"></script>
+<script src="js/ngwis/controllers/AddActuCtrl.js"></script>
+<script src="js/ngwis/controllers/UserCtrl.js"></script>
+<script src="js/ngwis/controllers/HomeCtrl.js"></script>
+<script src="js/ngwis/controllers/GalleryCtrl.js"></script>
+
+<!-- Angular : directives -->
+<script src="js/ngwis/directives/directives.js"></script>
+<script src="js/ngwis/directives/security.js"></script>
+<script src="js/ngwis/directives/menu.js"></script>
+<script src="js/ngwis/directives/tree.js"></script>
+<script src="js/ngwis/directives/mydatepicker.js"></script>
+<script src="js/ngwis/directives/myform.js"></script>
+<script src="js/ngwis/directives/prettyFileInput.js"></script>
+
+
+<!-- angularFileUpload -->
+<script type="text/javascript" src="js/libs/angular-file-upload.min.js"></script>
+
+<!-- CSS -->
+<!-- <link rel="stylesheet" href="js/libs/bootstrap/css/bootstrap-theme.css"> -->
+<link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css"/>
+<!-- <link rel="stylesheet" href="css/master.css"> -->
+<!-- <link rel="stylesheet" href="css/component_banner.css" /> -->
+<!-- <link rel="stylesheet" href="css/component_buttons.css"> -->
+<!-- <link rel="stylesheet" href="css/component_responsive_admin.css"> -->
+<!-- <link rel="stylesheet" href="css/component_responsive_menu.css"> -->
+<!-- <link rel="stylesheet" href="css/composant_action_menu.css" /> -->
+<!-- <link rel="stylesheet" href="css/ngwis.css"> -->
+<link rel="stylesheet" href="js/libs/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="css/gallery.css">
+<link rel="stylesheet" href="css/myactu.css">
+
+<title translate>generic.title</title>
+
+</head>
+
+
+
+<body ng-app="Ngwis" ng-controller="GlobalCtrl">
+	<div id="wait_container" ng-show="actionWaiting > 0">
+		<div id="wait">
+			<div class="f_circleG" id="frotateG_01"></div>
+			<div class="f_circleG" id="frotateG_02"></div>
+			<div class="f_circleG" id="frotateG_03"></div>
+			<div class="f_circleG" id="frotateG_04"></div>
+			<div class="f_circleG" id="frotateG_05"></div>
+			<div class="f_circleG" id="frotateG_06"></div>
+			<div class="f_circleG" id="frotateG_07"></div>
+			<div class="f_circleG" id="frotateG_08"></div>
+		</div>
+	</div>
+	<div id="responsive" responsive ng-model="responsive"></div>
+	<div id="super_container">
+		<header>
+			<div class="container-fluid">
+				<div class="row">
+						<a href="index.html">
+							<img src="http://cmsintranet.airfrance.fr/charte_v03_001_afklm/img/logo/af_klm_new.gif">
+						</a>
+						<button type="button" class="btn pull-right btn-default">Logout</button>
+				</div>
+				<div id="bandeau" class="row">
+					<h1 translate>generic.title</h1>
+				</div>
+			</div>
+		</header>
+		<!--header -->
+		<div ng-view ng-cloak id="container"></div>
+	</div>
+</body>
+</html>

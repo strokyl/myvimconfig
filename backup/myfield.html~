@@ -1,0 +1,84 @@
+<div class="form-group">
+    <label for="{{fieldId}}" class="col-sm-2 control-label">
+        {{label}}
+    </label>
+
+
+    <div class="col-sm-10" ng-switch="type">
+        <mydatepicker ng-switch-when="date"
+            data-input-id="{{fieldId}}"
+            name="{{label}}"
+            data-date="resource[fieldId]"
+        />
+        
+        <!-- Liste -->
+        <select ng-switch-when="liste"
+            name="{{fieldId}}"
+            id="{{fieldId}}"
+            class="form-control"
+            ng-options="item for item in choices"
+            ng-model="resource[fieldId]"
+        />
+
+        <!-- Html -->
+        <textarea ng-switch-when="html"
+            data-ng-model="resource[fieldId]"
+            data-ui-tinymce="tinymceOptions"
+            class="form-control"
+            name="{{fieldId}}"
+            id="{{fieldId}}"
+        >
+        </textarea>
+
+        <!-- Textarea -->
+        <textarea ng-switch-when="textarea"
+            ng-if="resource[fieldId]"
+            data-ng-model="resource[fieldId]"
+            type="text"
+            class="form-control"
+            name="{{fieldId}}"
+            id="{{fieldId}}"
+        >
+        </textarea>
+
+        <!-- Image -->
+        <div ng-switch-when="image">
+
+            <div class="col-sm-2">
+
+                <button
+                    type="button"
+                    id="{{fieldId}}"
+                    class="btn btn-default"
+                    data-ng-click="openGallerie(fieldId)"
+                >
+                    Choisir l'image
+                </button>
+
+            </div>
+
+            <!--  Aperçu de la vignette -->
+            <div class="imageForm col-sm-8">
+                <img src="{{resource[fieldId]}}" style="max-width: 500px" />
+            </div>
+
+        </div>
+
+        <!-- Checkbox -->
+        <input ng-switch-when="checkbox"
+            id="{{fieldId}}"
+            type="checkbox"
+            ng-model='resource[fieldId]'
+        />
+        
+
+        <!-- Text -->
+        <input ng-switch-default
+            id="{{fieldId}}"
+            type="{{type}}"
+            class="form-control"
+            ng-model='resource[fieldId]'
+        />
+    </div>
+
+</div>

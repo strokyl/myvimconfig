@@ -1,0 +1,599 @@
+'use strict';
+
+var directives = angular.module('Ngwis.Directives', ["ui.bootstrap"]).directive('ngBlur',
+		function() {
+			return function(scope, elem, attrs) {
+				elem.bind('blur', function() {
+					scope.$apply(attrs.ngBlur);
+				});
+			};
+		});
+
+directives.directive('responsive', function() {
+	return {
+		// A = attribute, E = Element, C = Class and M = HTML Comment
+		// Si onblur alors "A"ttribut. si input alors "E"lement !!!
+		restrict : 'A',
+		require : 'ngModel',
+		// The link function is responsible for registering DOM
+		// listeners as well as updating the DOM.
+		link : function(scope, elm, attr, ngModelCtrl) {
+			var tmp = elm.css('color');
+			// Attention : On ne doit pas setter cette valeur dans le
+			// controleur. sinon fonctionne pas !
+			if (tmp == "rgb(170, 0, 0)") {
+				console.log('Couleur :' + tmp);
+				scope.responsive = true;
+			} else
+				scope.responsive = false;
+		}
+	};
+});
+/**
+ * Pagination des listes
+ */
+directives
+		.directive(
+				'wisPagination',
+				function() {
+					return {
+						priority : 0,
+						restrict : 'A',
+						scope : {
+							items : '&',
+							number : '@'
+						},
+						templateUrl : 'template/pagin.html',
+						replace : true,
+						compile : function compile(tElement, tAttrs, transclude) {
+							return {
+								post : function postLink(scope, iElement,
+										iAttrs, controller) {
+									if (!scope.number)
+										scope.number = 10;
+									scope.paginator = {
+										pageSize : scope.number,
+										currentPage : 0
+									};
+									scope.numberOfPages = function() {
+										if (!!scope.items())
+											return Math
+													.ceil(scope.items().length
+															/ scope.paginator.pageSize);
+										else
+											return 1;
+									};
+									scope.firstPage = function() {
+										scope.paginator.currentPage = 0;
+									};
+									scope.isFirstPage = function() {
+										return scope.paginator.currentPage == 0;
+									};
+									scope.lastPage = function() {
+										scope.paginator.currentPage = scope
+												.numberOfPages() - 1;
+									};
+									scope.isLastPage = function() {
+										return scope.paginator.currentPage >= scope
+												.numberOfPages() - 1;
+									};
+									scope.incPage = function() {
+										if (!scope.isLastPage()) {
+											scope.paginator.currentPage++;
+										}
+									};
+									scope.decPage = function() {
+										if (!scope.isFirstPage()) {
+											scope.paginator.currentPage--;
+										}
+									};
+									scope.setCurrentPage = function(number) {
+										scope.paginator.currentPage = number;
+									};
+									scope.isCurrentPage = function(number) {
+										return scope.paginator.currentPage == number;
+									};
+									scope.getPageList = function() {
+										var pages = new Array();
+										for (var i = 0; i < scope
+												.numberOfPages(); i++)
+											pages.push(i);
+										return pages;
+									};
+
+									// ---- Functions available in parent scope
+									// -----
+									scope.$parent.firstPage = function() {
+										scope.firstPage();
+									};
+									// Function that returns the reduced items
+									// list, to use in ng-repeat
+									scope.$parent.pageItems = function() {
+										if (!!scope.items()) {
+											var start = scope.paginator.currentPage
+													* scope.paginator.pageSize;
+											var limit = parseInt(scope.paginator.pageSize);
+											return scope.items().slice(start,
+													start + limit);
+										} else
+											return scope.items();
+									};
+								}
+							};
+						}
+					};
+				});
+/**
+ * Tri des listes.
+ */
+directives.directive('wisSort', function() {
+	return {
+		templateUrl : 'template/sort.html',
+		restrict : 'E',
+		transclude : true,
+		replace : true,
+		scope : {
+			sortdir : '=',
+			sortedby : '=',
+			sortvalue : '@',
+			onsort : '='
+		},
+		link : function(scope, element, attrs) {
+			scope.sort = function() {
+				if (scope.sortedby == scope.sortvalue) {
+					scope.sortdir = !scope.sortdir;
+				} else {
+					scope.sortedby = scope.sortvalue;
+					scope.sortdir = false;
+				}
+				console.log(scope.sortedby + "#" + scope.sortdir + "#"
+						+ scope.sortvalue);
+				scope.onsort(scope.sortedby, scope.sortdir);
+			};
+		}
+	};
+});
+/**
+ * Directive pour gestion des listes. Cette directive permet d'afficher une
+ * liste simple avec possibilité d'édition des éléments. Les paramètres à passer
+ * sont : - list (ctrl) : la liste des éléments à afficher - columns : les
+ * colonnes à afficher. Cet élément est décrit plus en détail plus bas. - edit :
+ * indique si la liste est éditable ou non. Permet d'ajouter automatiquement les
+ * boutons de modification et de suppression ainsi que la ligne d'ajout en fin
+ * de liste. - filter : filtre à implémenter à l'extérieur de la liste - add,
+ * update, remove : fonctions d'ajout de modification et de suppression d'un
+ * élément. - check: fonction qui vérifie si les champs mandatory ne sont pas
+ * vides, et dans ce cas active le bouton ajouter - additem : variable du
+ * contrôleur utilisée pour l'ajout d'un élément - orderby : indique le tri par
+ * défaut. - change: fonction lancée pour les combos "dépendantes", fonctionne
+ * sur le type selectChange
+ * 
+ * columns est un objet javascript qui contient les informations suivantes : -
+ * type : type de l'information parmi les valeurs suivantes : text, link,
+ * select, selectChange // TODO ajouter les types au fur et à mesure - field :
+ * champ contenant l'information - readonly : indique si le champ doit rester en
+ * lecture seule lors de la modification d'un champ - displayonly : indique que
+ * le champ ne peut pas être saisi (même en création) - header : nom de la
+ * colonne. Correspond à un code qui sera traduit éventuellement - options:
+ * liste label/value dans le cas d'un field de type select - mandatory: indique
+ * si le champ ne doit pas être vide. - pattern: regexp utilisé pour le contrôle
+ * de saisie du champ - message: message associé au contrôle de saisie du
+ * pattern - url: url associé à un champ de type link orderby contient les
+ * informations suivantes : - field : nom du champ de tri - reverse : indique si
+ * le tri est ascendant (false) ou descendant (true)
+ */
+directives
+		.directive(
+				'wisList',["Criteria",
+				function(Criteria) {
+					return {
+						templateUrl : 'template/list.html',
+						restrict : 'E',
+						transclude : true,
+						replace : true,
+						scope : {
+							add : '=',
+							additem : '=',
+							headers : '=?',
+							columns : '=?',
+							edit : '=',
+							//if true allow the user to add a line to the list
+							addMoreInline : "=?",
+							//if not null a button add will be added behind the table and addMoreButton will
+							//be called with filter informations when the button will be click
+							addMoreButton : "=?",
+							// a list is expected with object like that
+							// {class:".....",
+							// callback:function(item){........}, this allow to
+							// add other button with specific action
+							otherButtons : "=?",
+							genericfilter : "=?",
+							list : '=',
+							orderby : '=',
+							update : '=',
+							remove : '=',
+							change : "=",
+							displayedLines : '=',
+							// default true, if set to false, the will be no
+							// button for editing the value of the column
+							inlineEdit : "=?",
+							// allow to call an function when a mouse enter
+							// hover a line,
+							mouseEnter : "=?",
+							// allow to call an function when a mouse leave a
+							// line,
+							mouseOver : "=?",
+							// alow to call an function when a mouse quit a line
+							mouseLeave : "=?",
+							// allow to display a text only when the mouse is
+							// over a row
+							textOver : "=?"
+						},
+						controller : function($scope) {
+							if ($scope.inlineEdit === null
+									|| typeof $scope.inlineEdit === 'undefined') {
+								$scope.inlineEdit = true;
+							}
+							if ($scope.addMoreInline === null
+									|| typeof $scope.addMoreInline === 'undefined') {
+								$scope.addMoreInline = true;
+							}
+							$scope.otherButtons = $scope.otherButtons || [];
+							$scope.updateInfobule = function($event) {
+								$scope.infobulePosition = {
+									'left' : $event.pageX + 30,
+									'top' : $event.pageY,
+								}
+							}
+							console.log($scope);
+							
+							$scope.someFilter = function () {
+								var cols = $scope.columns;
+								if($scope.genericfilter) {
+									return false;
+								}
+								var col;
+								for(var i=0;i < cols.length;i++) {
+									col = cols[i];
+									if(col.options && col.options.length > 1 && col.filter) {
+										return true;
+									}
+								}
+							}
+						},
+						link : function(scope, element, attrs) {
+							if (angular.isDefined(scope.headers)) {
+								scope.columns = [];
+								angular.forEach(scope.headers, function(line) {
+									angular.forEach(line, function(col) {
+										if (!col.group)
+											scope.columns.push(col);
+									});
+								});
+							} else if (angular.isDefined(scope.columns)) {
+								scope.headers = [];
+								scope.headers.push(angular.copy(scope.columns));
+							}
+							
+							scope.objectNotEmpty = function (o) {
+								return Object.keys(o).length > 0;
+							} 
+
+							scope.criteria = Criteria;
+							scope.$watch('criteria', function() {
+								if (angular.isDefined(scope.firstPage))
+									scope.firstPage();
+							}, true);
+							scope.filter = function() {
+								var crit = scope.criteria;
+								return function(item) {
+									var passed = true;
+									if (scope.genericfilter !== true) {
+										angular
+												.forEach(
+														scope.columns,
+														function(col) {
+															var colFilter = crit[col.field];
+															if(col.options && col.options.length == 1) {
+																colFilter = col.options[0].label;
+															}
+															if (angular
+																	.isDefined(crit)
+																	&& (!!colFilter)) {
+																if (col.filter == 'basic')
+																	passed = passed
+																			&& item[col.field]
+																					.toUpperCase()
+																					.indexOf(
+																							colFilter
+																									.toUpperCase()) > -1;
+																else if (col.filter == 'strict')
+																	passed = passed
+																			&& item[col.field] == colFilter;
+															} else if(col.filter == 'strict') {
+																passed = false;
+															}
+														});
+									} else {
+										if (angular.isDefined(crit)
+												&& !!crit.filter) {
+											passed = false;
+											angular
+													.forEach(
+															scope.columns,
+															function(col) {
+																var display;
+																if (col.type == 'select'
+																		|| col.type == 'selectChange') {
+																	angular
+																			.forEach(
+																					col.options,
+																					function(
+																							o) {
+																						if (item[col.field] == o.value)
+																							display = o.label;
+																					});
+
+																} else {
+																	display = item[col.field];
+																}
+																passed = passed
+																		|| angular
+																				.isUndefined(display)
+																		|| display
+																				.toString()
+																				.toUpperCase()
+																				.indexOf(
+																						crit.filter
+																								.toUpperCase()) > -1;
+															});
+										}
+									}
+									return passed;
+								};
+							};
+							scope.pageAccess = scope.$parent.pageAccess;
+							scope.additem = {};
+							scope.sort = function(sortedBy, sortDir) {
+								scope.orderby.reverse = sortDir;
+								scope.orderby.field = sortedBy;
+							};
+							scope.$watch('sort', function() {
+								if (angular.isDefined(scope.firstPage))
+									scope.firstPage();
+							}, true);
+						}
+					};
+				}]);
+
+directives.directive('wisText', function() {
+	return {
+		require : 'ngModel',
+		restrict : 'A',
+		link : function(scope, elm, attrs, ctrl) {
+			$(elm).attr('type', 'text');
+			if (!!attrs.transform) {
+				// Les fonctions amenées ici doivent se contenter de modifier la
+				// valeur retournée
+				// Aucune erreur ne doit être compilée ici.
+				var transforms = attrs.transform.split(" ");
+				if (transforms.indexOf("capitalize") > -1) {
+					ctrl.$parsers.push(function(val) {
+						if (!angular.isDefined(val))
+							return "";
+						else {
+							var cap = val.toUpperCase();
+							if (val != cap) {
+								ctrl.$setViewValue(val.toUpperCase());
+								ctrl.$render();
+							}
+							return val.toUpperCase();
+						}
+					});
+				}
+				if (transforms.indexOf("time") > -1) {
+					ctrl.$parsers.push(function(val) {
+						if (!angular.isDefined(val))
+							return "";
+						else if (/^[0-9]{4}$/.test(val)) {
+							console.log("Hello there", val);
+							var nval = val.substr(0, 2) + ':'
+									+ val.substr(2, 2);
+							if (nval != val) {
+								ctrl.$setViewValue(nval);
+								ctrl.$render();
+							}
+							return nval;
+						} else
+							return val;
+					});
+				}
+			}
+
+			ctrl.$parsers.push(function(val) {
+				// Fonction de RAZ des contrôles avant passage des éventuels
+				// tests
+				ctrl.$setValidity("pattern", true);
+				return val;
+			});
+
+			if (angular.isDefined(attrs.pattern)) {
+				// Les fonctions amenées ici doivent se contenter de rajouter
+				// des validités au ngModelController
+				// La valeur retournée doit être identique à la valeur passée en
+				// paramètre
+				ctrl.$parsers.push(function(val) {
+					var check = true;
+					if (angular.isDefined(val) && val.length > 0)
+						check = val.search(attrs.pattern) > -1;
+					ctrl.$setValidity("pattern", check);
+					return val;
+				});
+			}
+		}
+	};
+});
+
+directives.directive('wisDate', function() {
+	return {
+		require : 'ngModel',
+		restrict : 'A',
+		link : function(scope, elm, attrs, ctrl) {
+			$(elm).attr('type', 'text');
+
+			ctrl.$parsers.push(function(val) {
+				// Fonction de RAZ des contrôles avant passage des tests
+				ctrl.$setValidity('date', true);
+				ctrl.$setValidity('weekday', true);
+				return val;
+			});
+
+			ctrl.$parsers.push(function(val) {
+				var check = true;
+				if (angular.isString(val)) {
+					try {
+						$.datepicker.parseDate('dd-mm-yy', val);
+					} catch (err) {
+						check = false;
+					}
+				} else if (angular.isDate(val)) {
+					val = $.datepicker.formatDate("dd-mm-yy", val);
+				} else {
+					check = false;
+				}
+				ctrl.$setValidity('date', check);
+				return val;
+			});
+
+			if (angular.isDefined(attrs.weekday) && attrs.weekday != "")
+				ctrl.$parsers.push(function(val) {
+					var weekday = true;
+					if (angular.isDefined(val) && ctrl.$valid)
+						weekday = $.datepicker.parseDate('dd-mm-yy', val)
+								.getDay() == attrs.weekday;
+					ctrl.$setValidity('weekday', weekday);
+					return val;
+				});
+
+			$(elm).datepicker({
+				dateFormat : "dd-mm-yy",
+				firstDay : 1,
+				onSelect : function(date) {
+					scope.$apply(function() {
+						ctrl.$setViewValue(date);
+					});
+				}
+			});
+		}
+	};
+});
+
+directives.directive('wisNumber', function() {
+	return {
+		require : 'ngModel',
+		restrict : 'A',
+		link : function(scope, elm, attrs, ctrl) {
+			$(elm).attr('type', 'number');
+
+			ctrl.$parsers.push(function(val) {
+				// Fonction de RAZ des contrôles avant passage des tests
+				ctrl.$setValidity('number', true);
+				ctrl.$setValidity('gt', true);
+				ctrl.$setValidity('gte', true);
+				ctrl.$setValidity('lt', true);
+				ctrl.$setValidity('lte', true);
+				ctrl.$setValidity('integer', true);
+				return val;
+			});
+
+			ctrl.$parsers.push(function(val) {
+				ctrl.$setValidity('number', !isNaN(parseFloat(val)));
+				return val;
+			});
+
+			if (angular.isDefined(attrs.gt)) {
+				ctrl.$parsers.push(function(val) {
+					if (!isNaN(parseFloat(val)))
+						ctrl.$setValidity('gt',
+								parseFloat(val) > parseFloat(attrs.gt));
+					return val;
+				});
+			}
+			if (angular.isDefined(attrs.gte)) {
+				ctrl.$parsers.push(function(val) {
+					if (!isNaN(parseFloat(val)))
+						ctrl.$setValidity('gte',
+								parseFloat(val) >= parseFloat(attrs.gte));
+					return val;
+				});
+			}
+			if (angular.isDefined(attrs.lt)) {
+				ctrl.$parsers.push(function(val) {
+					if (!isNaN(parseFloat(val)))
+						ctrl.$setValidity('lt',
+								parseFloat(val) < parseFloat(attrs.lt));
+					return val;
+				});
+			}
+			if (angular.isDefined(attrs.lte)) {
+				ctrl.$parsers.push(function(val) {
+					if (!isNaN(parseFloat(val)))
+						ctrl.$setValidity('lte',
+								parseFloat(val) <= parseFloat(attrs.lte));
+					return val;
+				});
+			}
+			if (angular.isDefined(attrs.integer)) {
+				ctrl.$parsers
+						.push(function(val) {
+							if (!isNaN(parseFloat(val)))
+								ctrl.$setValidity('integer',
+										parseFloat(val) % 1 === 0);
+							return val;
+						});
+			}
+		}
+	};
+});
+
+directives
+		.directive(
+				'wisRating',
+				function() {
+					return {
+						restrict : 'A',
+						template : '<span ng-click="toggle(-1)">X  </span>'
+								+ '<ul class="rating">'
+								+ '<li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)">'
+								+ '\u2605' + '</li>' + '</ul>',
+
+						scope : {
+							ratingValue : '=',
+							ratingMax : '=',
+							onRatingSelected : '&'
+						},
+						link : function(scope, elem, attrs) {
+							var updateStars = function() {
+								scope.stars = [];
+								for (var i = 0; i < scope.ratingMax; i++) {
+									scope.stars.push({
+										color_blueklm : i < scope.ratingValue
+									});
+								}
+							};
+
+							scope.toggle = function(index) {
+								scope.ratingValue = index + 1;
+								scope.onRatingSelected({
+									newRating : index + 1
+								});
+
+							};
+
+							scope.$watch('ratingValue',
+									function(oldVal, newVal) {
+										updateStars();
+									});
+						}
+					};
+				});

@@ -1,0 +1,96 @@
+'use strict';
+angular.module('Ngwis.Controllers')
+.controller('SiteCtrl', [ '$scope', '$translate', '$window', '$location', '$routeParams', 'BrancheService', 'ActuService',
+                        	function($scope, $translate, $window, $location, $routeParams, BrancheService, ActuService) {
+	
+	var brancheName = $scope.selectedBranche = $scope.brancheName = $routeParams.brancheName;
+	if(brancheName) {
+		$scope.startWait()
+		var actus = $scope.actus = ActuService.list({brancheName:brancheName});
+		//actus.$then($scope.endWait);
+actus.$then(function() {
+    console.log(actus);
+    $scope.endWait();
+})
+	}
+
+	$scope.startWait()
+	var brancheList = $scope.brancheList = BrancheService.list();
+	brancheList.$then($scope.endWait);
+	
+	
+	$scope.$watch('selectedBranche', function(newValue) {
+		if(newValue !== brancheName && newValue) {
+			$location.path('/site/' + newValue);
+		}
+	});
+	
+	$scope.modify = function (elem) {
+		console.log("Modify");
+	}
+	
+	$scope.addMoreButton = function (filter) {
+		$location.path('/addActu/' + brancheName);
+	}
+	
+	var more = function (elem) {
+		   $scope.startWait();
+		   ActuService.getOverview({brancheName:elem.brancheName, actuFile:elem.actuFile}, function(data) {
+			   var url = data.url;
+			   $window.open(url);
+			   $scope.endWait();
+		   }, function(error) {
+			   console.log(error)
+			   $scope.onError(error,$scope.columns);
+			   $scope.endWait();
+		   });
+	   	};
+	
+	var edit = function (elem) {
+		$location.path('/updateActu/' + elem.brancheName + '/' + elem.actuFile);
+	}
+	
+	$scope.textOver = function (item) {
+		return item.titreFr;
+	}
+	   	
+	//glyphicon glyphicon-pencil
+	//display the overview of the modification in a new Windows
+	$scope.otherButtons = [
+	                       //bouton more
+	                       {"class":'icon-af icon-af-B-digital-oeil-explorer', callback:more},
+	                       //bouton edition
+	                       {"class":'icon-af icon-af-B-digital-crayon-editer', callback:edit}
+	                       ];
+	
+	/**
+	$scope.remove = function (elem) {
+		var param = {brancheName:elem.brancheName, actuFile:elem.actuFile};
+		$scope.startWait();
+		ActuService.remove(param, function(data) {
+			$scope.flashMessage($translate("actu.deleted", param));
+			angular.forEach($scope.actus, function (actu, i) {
+				if (actu.brancheName === param.brancheName && actu.actuFile == param.actuFile) {
+					$scope.actus.splice(i,1); 
+				}
+			});
+			$scope.endWait();
+		}, function(error) {
+			console.log(error)
+			$scope.onError(error,$scope.columns);
+		});
+	}
+	**/
+	
+	$scope.columns = [
+	                  {type: 'text', field:'actuFile', header:'actu.name', width:2, readonly: false, mandatory:true, message:'alphabétique', transform:"capitalize", exclamation_mark:'draft'},
+	                  {type: 'date', field:'actuDate', header:'actu.publication_date', width:2, readonly: false, mandatory:false}
+		             ];
+	
+	$scope.orderBy = {field:'actuDate', reverse:'true'};
+	
+	$scope.saveRatingToServer = function(rating) { 
+	       alert('Rating selected - ' + rating); 
+	   }; 
+	   
+}]);
