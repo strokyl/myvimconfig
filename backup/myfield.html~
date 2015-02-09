@@ -23,7 +23,7 @@
         <!-- Html -->
         <textarea ng-switch-when="html"
             data-ng-model="resource[fieldId]"
-            data-ui-tinymce="tinymceOptions"
+            data-ui-tinymce
             class="form-control"
             name="{{fieldId}}"
             id="{{fieldId}}"

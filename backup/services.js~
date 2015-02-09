@@ -1,0 +1,75 @@
+'use strict';
+
+angular.module('Ngwis.Services', ['ngResource']).
+		factory('UserService', function ($resource) {
+			return $resource('resources/users/:id', {}, {
+            	'query': { method: 'GET', isArray: true },
+                'modify': {method:'PUT', isArray: false },
+                'remove': {method:'POST', isArray: false, headers:{'X-HTTP-Method-Override':'DELETE'}}
+			});
+		}).
+		factory('BrancheService', function ($resource) {
+			return $resource('resources/branches/', {}, {
+            	'list': { method: 'GET', isArray: true },
+				'themes' : { method : 'GET', isArray : true, url:'resources/branches/themes/:brancheName'},
+            	'unitsites' : { method : 'GET', isArray : true, url:'resources/branches/unitsites/:brancheName'}
+			});
+		}).		
+		factory('ActuService', function ($resource) {
+			return $resource('resources/actus/', {}, {
+            	'list': { method: 'GET', url:'resources/actus/:brancheName', isArray: true },
+            	'listAll': { method: 'GET', isArray: true },
+            	'images': { method: 'GET', url:'resources/actus/images/:brancheName', isArray: true},
+            	'get' : { method : 'GET', url:'resources/actus/:brancheName/:actuFile'},
+            	'put' : { method : 'PUT', url:'resources/actus/:brancheName'},
+            	'publish' : { method : 'PUT', url:'resources/actus/publish/:brancheName/:actuFile'},
+            	'remove' : { method : 'DELETE', isArray: false,
+            		url:'resources/actus/:brancheName/:actuFile'},
+                	//allow to have the url of the overview of modification of an actu
+                'getOverview' : {method:'GET', isArray: false,
+                	url:'resources/actus/getOverview/:brancheName/:actuFile',
+                	transformResponse : function (data) {
+                		return {url:data};
+                	}}
+			});
+		}).		
+		factory('ImageService', function ($resource) {
+			return $resource('resources/images/:brancheName/', {}, {
+            	'getAll': { method: 'GET'},
+			});
+		}).
+		factory('Criteria', function() {
+			return {};
+		}).
+      	factory('menuOptions', [ '$q', '$timeout', function($q, $timeout) {
+        	var deferred = $q.defer();
+        	// Definition des divers élements de menu (verticaux et horizontaux).
+        	$timeout(function() {
+        		deferred.resolve({
+        			menuOptions : {
+        				uListOptionItems : [
+        				   {"name": "Add", "heyding_icon": "+", "selected":"false", "relValue":"create_via_post"}
+        				],	
+        			    pListOptionItems : [
+        			       {"name": "Add", "heyding_icon": "+", "selected":"false", "relValue":"create_via_post"}
+        			    ],	
+        			    pocListOptionItems : [
+        			       {"name": "Add", "heyding_icon": "+", "selected":"false", "relValue":"create_via_post"}
+        			    ],	
+        			    tListOptionItems : [
+        			       {"name": "Add", "heyding_icon": "+", "selected":"false", "relValue":"create_via_post"}
+        			    ],	
+        				MenusHItems : [
+        				   {"name": "menu.home","link": "/home","heyding_icon": "P", "selected":""},
+        				   {"name": "menu.user","link": "/user","heyding_icon": "P", "selected":""},
+        				   {"name": "menu.select","link": "/select","heyding_icon": "P", "selected":""}
+        				]	
+        			}
+        		});
+        	}, 50);
+
+        	return deferred.promise.then(function(result) {
+        		return result.menuOptions;
+        	});
+        }]);
+   

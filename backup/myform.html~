@@ -1,8 +1,3 @@
-<form
-    role="form"
-    class="form-horizontal"
-    ng-submit='myformSubmit'
->
 
         <!-- Lang -->
         <div class="form-group" ng-repeat="l in form.lang">
@@ -39,6 +34,7 @@
                     data-field-id="{{_id.id}}"
                     data-type="{{field.type}}"
                     data-choices="field.choices"
+                    data-images="images"
                     data-branche-name="brancheName"
                 />
 
@@ -51,10 +47,10 @@
                     data-field-id="{{field.id}}"
                     data-type="{{field.type}}"
                     data-choices="field.choices"
+                    data-images="images"
                     data-branche-name="brancheName"
                 />
             </div>
 
         </div>
 
-</form>

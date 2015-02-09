@@ -7,191 +7,24 @@
     <h1 ng-if="createActu">Nouvelle actualité</h1>
     
 
-    <myform
-        data-form='form'
-        data-resource='actu'
-        data-myform-submit='saveChange()'
-        data-images="images"
-        data-branche-name="brancheName"
-    />
 
-    <form role="form" class="form-horizontal" ng-show='actu' ng-submit='saveChange()'>
+    <form role="form" class="form-horizontal" ng-if='actu' ng-submit='saveChange()'>
 
-        <!-- Nom du ficher -->
-        <div ng-if="createActu" class="form-group">
-            <label for="actuTitre" class="col-sm-2 control-label">Nom du ficher</label>
-            
-            <div class="col-sm-10">
-                <input id="actuTitre" name="actuTitre" type="text" placeholder="Le nom de votre nouveau DCR" class="form-control"
-                 required="" ng-model="actu.actuFile">
-            </div>
-
-        </div>
-        
-        <!-- Lang -->
-        <div class="form-group" ng-repeat="l in lang">
-
-                <label for="{{l.id}}" class="col-sm-2 control-label"> {{l.lang}} : </label>
-                
-                
-                <div class="col-sm-10">
-                
-                    <input id="{{l.id}}" type="checkbox" ng-model='actu[l.id]'>
-                    
-                </div>
-
-        </div>
-
-        <!-- Titre -->
-        <div class="form-group show-anim" ng-repeat="l in titre" ng-show="actu[l.lang]">
-                <label for="{{l.id}}" class="col-sm-2 control-label">Titre ({{l.lang}}) : </label>
-
-                <div class="col-sm-10">
-
-                    <input id="{{l.id}}" name="actuTitre" type="text" placeholder="le titre de votre actualité ({{l.lang}})" class="form-control" 
-                      ng-model="actu[l.id]">
-                
-                </div>
-        </div>
-
-        <!-- Date -->
-        <div class="form-group">
-
-                <label for="actuDate" class="col-sm-2 control-label">Date : </label>
-
-                <div class="col-sm-10">
-
-                    <mydatepicker
-                        data-input-id="actuDate"
-                        name="actuDate"
-                        data-date="actu.actuDate"
-                    />
-
-                
-                </div>
-        </div>
-
-
-        <!-- Theme -->
-        <div class="form-group">
-                <label for="actuTheme" class="col-sm-2 control-label">Theme : </label>
-                
-                
-                <div class="col-sm-10">
-                
-                    <select id="actuTheme" name="actuThemee" class="form-control" ng-options="theme for theme in themes" ng-model="actu.actuTheme"></select>
-                    
-                   </div>
-
-        </div>
-
-        <!-- UnitSite -->
-        <div class="form-group">
-                <label for="unitSite" class="col-sm-2 control-label">Unit site : </label>
-                
-                
-                <div class="col-sm-10">
-                
-                    <select id="unitSite" name="unitSite" class="form-control" ng-options="unitSite for unitSite in unitSites" ng-model="actu.unitSite"></select>
-                    
-                   </div>
-
-        </div>
-
-
-        <!-- TexteRiche -->
-        <div class="form-group" ng-show='actu[l.lang]' ng-repeat="l in texteRiche">
-
-            <label class="col-sm-2 control-label" for="{{l.id}}">Corps ({{l.lang}}) : </label>
-        
-            <div class="col-sm-10">
-
-            
-                <!--  TinyMCE -->
-                <textarea id="{{l.id}}" data-ng-model="actu[l.id]" data-ui-tinymce="tinymceOptions" name="l.id" class="form-control">
-				    </textarea>
-            
-            </div>
-        </div>
-
-        <!--  Image -->
-        <div class="form-group" ng-repeat="l in image" ng-show='actu[l.lang]'>
-            <label for="vignette" class="col-sm-2 control-label" for="{{l.id}}">Image ({{l.lang}}) : </label>
-
-            <div class="col-sm-2">
-
-                <button type="button" id="{{l.id}}" class="btn btn-default" data-ng-click="openGallerie(l.id)">Choisir l'image</button>
-
-            </div>
-
-            <!--  Aperçu de la vignette -->
-            <div class="imageForm col-sm-8">
-                <img src="{{actu[l.id]}}" style="max-width: 500px" />
-            </div>
-        </div>
-
-        <!-- Bouton avancé -->
-        <div class="form-group">
-
-                <label for="advanced" class="col-sm-2 control-label"> Mode avancé : </label>
-                
-                
-                <div class="col-sm-10">
-                
-                    <input id="advanced" type="checkbox" ng-model='advanced'>
-                    
-                </div>
-
-        </div>
-
-        <!-- Chapeau -->
-        <div class="form-group" ng-show='actu[l.lang] && advanced' ng-repeat="l in chapeau">
-
-                <label for="{{l.id}}" class="col-sm-2 control-label">Chapeau ({{l.lang}}) : </label>
-
-                <div class="col-sm-10">
-
-                    <textarea id="{{l.id}}" name="actuTitre" type="text" placeholder="Le chapeau de votre actualité ({{l.lang}})" class="form-control" 
-                      ng-model="actu[l.id]"></textarea>
-                
-                </div>
-        </div>
-
-        <!-- une -->
-        <div class="form-group" ng-show="advanced">
-
-                <label for="une" class="col-sm-2 control-label"> Une : </label>
-                
-                
-                <div class="col-sm-10">
-                
-                    <input id="une" type="checkbox" ng-model='actu.une'>
-                    
-                </div>
-        </div>
-
-        <!-- hot -->
-        <div class="form-group" ng-show="advanced">
-
-                <label for="une" class="col-sm-2 control-label"> Hot : </label>
-                
-                
-                <div class="col-sm-10">
-                
-                    <input id="hot" type="checkbox" ng-model='actu.hot'>
-                    
-                </div>
-        </div>
-
-
+        <!-- Génération de html du formulaire -->
+        <myform
+            data-form='form'
+            data-resource='actu'
+            data-images="images"
+            data-branche-name="brancheName"
+        />
 
         <!--  Bouton annuler et supprimer -->
         <div class="form-group">
             <div class="col-sm-4 col-sm-offset-8">
 
-                <button type="submit" ng-hide="uploaderVignette.progress || uploaderImage.progress" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" ng-hide="uploaderVignette.progress || uploaderImage.progress" class="btn btn-primary" ng-click='apercu()'>Apercu</button>
-                <button type="button" ng-hide="uploaderVignette.progress || uploaderImage.progress" class="btn btn-primary" ng-click='publish()'>Publier</button>
+                <button type="submit" class="btn btn-primary">Sauvegarder</button>
+                <button type="button" class="btn btn-primary" ng-click='apercu()'>Apercu</button>
+                <button type="button" class="btn btn-primary" ng-click='publish()'>Publier</button>
                 <button type="reset" class="btn btn-danger" ng-click='cancel()'>Annuler</button>
             
             </div>
