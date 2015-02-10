@@ -1,0 +1,105 @@
+'use strict';
+
+angular.module('Ngwis.Services').
+factory('ActuForm', function () {
+
+    var lang = [{id:'fr', lang:'Français'}, {id:'en', lang: 'Anglais'}];
+
+	var capitalize = function(s) {
+	    return s[0].toUpperCase() + s.slice(1);
+	};
+
+    var buildLangId = function(fieldName) {
+        var j, l;
+        var field = [];
+        for (j = 0; j < lang.length; j++) {
+            l = lang[j].id;
+            field.push({
+                lang:l,
+                id:fieldName+capitalize(l)
+            });
+        }
+        return field;
+    };
+
+    var titre = { id : buildLangId('titre'), label : "Titre", type: "text" };
+
+    var actuDate = { id : "actuDate", label : "Date", type : "date" };
+
+    var actuTheme= { id: "actuTheme", label: "Theme", type : "liste" }; 
+
+    var unitSite = { id: "unitSite", label: "Unit site", type : "liste" };
+
+    var texteRiche = { id : buildLangId("texteRiche"), label : "Corps", type : "html" }; 
+
+    var image = { id : buildLangId("image"), label : "Image", type : "image" };
+
+    var advanced = { id : "advanced", label : "Mode avancé", type : "checkbox" };
+
+    var chapeau  = { id : buildLangId("chapeau"), label : "Chapeau",
+        displayIf : "advanced",
+        type : "textarea"
+    };
+
+    var une = { id : "une", label:  "Une", type : "checkbox", displayIf : "advanced" };
+
+    var hot = { id : "hot", label : "Hot", type : "checkbox", displayIf : "advanced" };
+
+
+    var actuFile = { id : "actuFile", label : "Nom de fichier", type : "text" };
+
+
+    return {
+        getForm : function(type, newActu, themeChoice, unitSiteChoice) {
+            var form; 
+            
+            var _unitSite = angular.copy(unitSite);
+            var _actuTheme = angular.copy(actuTheme);
+
+            _unitSite.choices = unitSiteChoice;
+            _actuTheme.choices = themeChoice;
+
+            console.log("type", type);
+            if(type === "middlePack") {
+
+                form = {
+                    lang : lang,
+                    fields : [
+                        titre,
+                        actuDate,
+                        _actuTheme,
+                        _unitSite,
+                        texteRiche,
+                        image,
+                        advanced,
+                        chapeau
+                    ]
+                };
+
+            } else if (type === "ITComm") {
+
+                form = {
+                    lang : lang,
+                    fields : [
+                        titre,
+                        actuDate,
+                        _actuTheme,
+                        _unitSite,
+                        texteRiche,
+                        image,
+                        advanced,
+                        chapeau
+                    ]
+                };
+
+            }
+
+            if(newActu) {
+                form.fields.unshift(actuFile);
+            };
+
+            return form;
+        }
+    };
+});
+

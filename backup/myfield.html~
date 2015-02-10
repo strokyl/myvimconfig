@@ -32,7 +32,6 @@
 
         <!-- Textarea -->
         <textarea ng-switch-when="textarea"
-            ng-if="resource[fieldId]"
             data-ng-model="resource[fieldId]"
             type="text"
             class="form-control"

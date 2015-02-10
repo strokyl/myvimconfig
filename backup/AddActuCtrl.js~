@@ -1,0 +1,31 @@
+'use strict';
+
+var AddActuCtrl = function ($scope, $injector, $routeParams, $translate, $location, $window, BrancheService, ActuService, ImageService, ActuForm){
+	//because of the factorisation of the code between createActu et updateActu
+	$scope.createActu = true;
+	
+	$scope.actuFile = "";
+	
+	$scope.actu = {fr:true, en:false, actuDate : new Date(), "@type" : "middlePack"};
+	
+	$scope.advanced = false;
+	
+	var injectorParam = {
+		 $scope : $scope,	
+         $routeParams : $routeParams,	
+         $translate : $translate,	
+         $location : $location,	
+         $window : $window,	
+         ActuService : ActuService,
+         BrancheService: BrancheService,
+         ImageService : ImageService,
+         ActuForm : ActuForm
+         };
+
+	$injector.invoke(EditActuCtrl, this, injectorParam);
+};
+
+AddActuCtrl.prototype = Object.create(EditActuCtrl.prototype);
+
+angular.module('Ngwis.Controllers')
+.controller('AddActuCtrl', ['$scope', '$injector', '$routeParams', '$translate', '$location', '$window', 'BrancheService', 'ActuService', 'ImageService', 'ActuForm']);

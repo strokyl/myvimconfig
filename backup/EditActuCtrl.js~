@@ -1,7 +1,7 @@
 /**
  * 
  */
-var EditActuCtrl = function ($scope, $routeParams, $translate, $timeout, $location, $window, $modal, $filter, FileUploader, BrancheService, ActuService, ImageService) {
+var EditActuCtrl = function ($scope, $routeParams, $translate, $location, $window, BrancheService, ActuService, ImageService, ActuForm) {
 
 	this.scope = $scope;
 
@@ -54,85 +54,15 @@ var EditActuCtrl = function ($scope, $routeParams, $translate, $timeout, $locati
 	this.scope.apercu = angular.bind(this, this.apercu, ActuService, $translate, $location, $window);
 	this.scope.cancel = angular.bind(this, this.cancel, $location);
 	
-	var capitalize = function(s) {
-	    return s[0].toUpperCase() + s.slice(1);
-	};
-
-	var lang = this.scope.lang = [{id:'fr', lang:'Français'}, {id:'en', lang: 'Anglais'}];
-
-    var buildLangId = function(fieldName) {
-        var field = [];
-		for (j = 0; j < lang.length; j++) {
-			l = lang[j].id;
-			field.push({
-				lang:l,
-				id:fieldName+capitalize(l)
-			});
-		}
-        return field;
+    if($scope.actu["@type"]) {
+        $scope.form = ActuForm.getForm(data.data["@type"], $scope.createActu, themes, unitSites  );
+    } else {
+        this.scope.actu.$then(function(data) {
+            $scope.form = ActuForm.getForm(data.data["@type"], $scope.createActu, themes, unitSites  );
+        });
     }
-	
-    var form = this.scope.form = {
-        lang : lang,
-        fields : [
-            {
-                id : buildLangId('titre'),
-                label : "Titre",
-                type: "text"
-            },
-            {
-                id : "actuDate",
-                label : "Date",
-                type : "date",
-            },
-            {
-                id: "actuTheme",
-                label: "Theme",
-                type : "liste",
-                choices : themes
-            },
-            {
-                id: "unitSite",
-                label: "Unit site",
-                type : "liste",
-                choices : unitSites
-            },
-            {
-                id : buildLangId("texteRiche"),
-                label : "Corps",
-                type : "html"
-            },
-            {
-                id : buildLangId("image"),
-                label : "Image",
-                type : "image"
-            },
-            {
-                id : "advanced",
-                label : "Mode avancé",
-                type : "checkbox"
-            },
-            {
-                id : buildLangId("chapeau"),
-                label : "Chapeau",
-                type : "textarea",
-                displayIf : "advanced"
-            },
-            {
-                id : "une",
-                label:  "Une",
-                type : "checkbox",
-                displayIf : "advanced"
-            },
-            {
-                id : "hot",
-                label : "Hot",
-                type : "checkbox",
-                displayIf : "advanced"
-            }
-        ]
-    };
-}
+
+};
 
 
 EditActuCtrl.prototype.goBackToList = function($location) {

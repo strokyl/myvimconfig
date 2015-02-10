@@ -35,8 +35,6 @@
 <!-- Angular : services -->
 <script src="js/ngwis/services/services.js"></script>
 
-<script src="js/ngwis/services/uiTinymceConfig.js"></script>
-
 
 <!-- Angular : contrôleurs -->
 <script src="js/ngwis/controllers/GlobalCtrl.js"></script>
