@@ -1,0 +1,16 @@
+/**
+ * 
+ */
+angular.module('Ngwis.Directives').directive("mytooltip", function() {
+	return {
+		restrict : 'E',
+		template : '<span>{{texte}}</span>',
+		scope : {
+			//the tree
+			texte : '=mytooltip',
+		},
+		controller : function($scope) {
+            console.log("tooltip");
+		}
+	}
+});

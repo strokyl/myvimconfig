@@ -1,17 +1,46 @@
 'use strict';
 angular.module('Ngwis.Controllers')
-.controller('SiteCtrl', [ '$scope', '$translate', '$window', '$location', '$routeParams', 'BrancheService', 'ActuService',
-                        	function($scope, $translate, $window, $location, $routeParams, BrancheService, ActuService) {
+.controller('SiteCtrl', [ '$scope', '$translate', '$window', '$location', '$routeParams', '$filter', 'BrancheService', 'ActuService', 'ngTableParams', 
+                        	function($scope, $translate, $window, $location, $routeParams, $filter, BrancheService, ActuService, ngTableParams) {
 	
 	var brancheName = $scope.selectedBranche = $scope.brancheName = $routeParams.brancheName;
+
 	if(brancheName) {
 		$scope.startWait()
-		var actus = $scope.actus = ActuService.list({brancheName:brancheName});
+		var actus = ActuService.list({brancheName:brancheName});
 		//actus.$then($scope.endWait);
         actus.$then(function() {
             $scope.endWait();
         })
 	}
+
+    var tableParams = $scope.tableParams = new ngTableParams({
+        page : 1,
+        count : 25,
+        sorting : {'name' : 'asc'}
+    }, {
+        total: 0,
+        counts : [],
+        getData : function($defer, params) {
+            actus.$then(function(response) {
+                var data = params.sorting() ?
+                            $filter('orderBy')(response.data, params.orderBy())
+                            :response.data;
+                data = $filter('filter')(data, $scope.filter);
+                $defer.resolve(data.slice((params.page() - 1) * params.count(),
+                        params.page() * params.count()));
+                params.total(data.length);
+            });
+        }
+    })
+
+    $scope.$watch('filter', function(newValue, oldValue) {
+        if(newValue !== oldValue) {
+            console.log("Trigger $waztch filter");
+            tableParams.reload();
+        }
+    });
+
 
 	$scope.startWait()
 	var brancheList = $scope.brancheList = BrancheService.list();
@@ -28,11 +57,11 @@ angular.module('Ngwis.Controllers')
 		console.log("Modify");
 	}
 	
-	$scope.addMoreButton = function (filter) {
+	$scope.addMoreButton = function () {
 		$location.path('/addActu/' + brancheName);
 	}
 	
-	var more = function (elem) {
+	var more = $scope.more = function (elem) {
 		   $scope.startWait();
 		   ActuService.getOverview({brancheName:elem.brancheName, actuFile:elem.actuFile}, function(data) {
 			   var url = data.url;
@@ -45,7 +74,7 @@ angular.module('Ngwis.Controllers')
 		   });
 	   	};
 	
-	var edit = function (elem) {
+	var edit = $scope.edit = function (elem) {
 		$location.path('/updateActu/' + elem.brancheName + '/' + elem.actuFile);
 	}
 	

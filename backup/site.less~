@@ -1,0 +1,88 @@
+@import (reference) "general/general.less";
+
+#page-site {
+
+	#contenu {
+
+		.nom-site {
+			font-size: 24px;
+			color:@color_red;
+			margin-top: 3px;
+		}
+
+		.table {
+
+			.shrink {
+				width: 100px;
+			}
+
+			.btn {
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+
+			th {
+				font-weight: bold;
+			}
+
+			tr {
+				td .btn{
+					&:hover {
+						color:red;
+					}
+				}
+			}
+		}
+
+		.pagination {
+			margin-top: 2px;
+		}
+
+		.select-site-et-recherche {
+			margin-bottom: 15px;
+		}
+
+		input, select, textarea{
+		    color: @color_dark_blue;
+		}
+
+		textarea:focus, input:focus {
+		    color: @color_dark_blue;
+		}
+
+	}
+
+}
+
+@media (min-width:768px) {
+	#page-site {
+
+		#contenu {
+
+			.ajout-publication {
+				margin-right: 10px;
+			}
+
+		}
+
+	}
+}
+
+@media (max-width:767px) {
+	#page-site {
+
+		#contenu {
+
+			.input-group-addon {
+				min-width: 50px;
+			}
+
+		}
+
+	}
+}
+
+
+.ng-table th {
+    text-align: left !important;
+}

@@ -1,0 +1,43 @@
+#page-site #contenu .nom-site {
+  font-size: 24px;
+  color: #ff0000;
+  margin-top: 3px;
+}
+#page-site #contenu .table .shrink {
+  width: 100px;
+}
+#page-site #contenu .table .btn {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#page-site #contenu .table th {
+  font-weight: bold;
+}
+#page-site #contenu .table tr td .btn:hover {
+  color: red;
+}
+#page-site #contenu .pagination {
+  margin-top: 2px;
+}
+#page-site #contenu .select-site-et-recherche {
+  margin-bottom: 15px;
+}
+#page-site #contenu input,
+#page-site #contenu select,
+#page-site #contenu textarea {
+  color: #051039;
+}
+#page-site #contenu textarea:focus,
+#page-site #contenu input:focus {
+  color: #051039;
+}
+@media (min-width: 768px) {
+  #page-site #contenu .ajout-publication {
+    margin-right: 10px;
+  }
+}
+@media (max-width: 767px) {
+  #page-site #contenu .input-group-addon {
+    min-width: 50px;
+  }
+}

@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
 <!-- JQuery -->
@@ -60,6 +61,7 @@
 <script src="js/ngwis/directives/myform.js"></script>
 <script src="js/ngwis/directives/prettyFileInput.js"></script>
 <script src="js/ngwis/directives/myvideo.js"></script>
+<script src="js/ngwis/directives/mytooltip.js"></script>
 
 <!--  Video js -->
 <link href="js/libs/video-js/video-js.css" rel="stylesheet" type="text/css">
@@ -87,7 +89,7 @@
 <link rel="stylesheet" href="css/ng-table.min.css"> 
 <link rel="stylesheet" type="text/css" href="assets/app_components/css/general/general.css">
 <link rel="stylesheet" type="text/css" href="assets/app_components/css/site.css">
-<link rel="stylesheet" type="text/css" href="assets/app_components/css/index.css">
+<!--<link rel="stylesheet" type="text/css" href="assets/app_components/css/index.css">-->
 
 <link href="assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
@@ -100,35 +102,44 @@
 
 
 <body ng-app="Ngwis" ng-controller="GlobalCtrl">
-	<div id="wait_container" ng-show="actionWaiting > 0">
-		<div id="wait">
-			<div class="f_circleG" id="frotateG_01"></div>
-			<div class="f_circleG" id="frotateG_02"></div>
-			<div class="f_circleG" id="frotateG_03"></div>
-			<div class="f_circleG" id="frotateG_04"></div>
-			<div class="f_circleG" id="frotateG_05"></div>
-			<div class="f_circleG" id="frotateG_06"></div>
-			<div class="f_circleG" id="frotateG_07"></div>
-			<div class="f_circleG" id="frotateG_08"></div>
-		</div>
-	</div>
-	<div id="responsive" responsive ng-model="responsive"></div>
-	<div id="super_container">
-		<header>
-			<div class="container-fluid">
-				<div class="row">
-						<a href="index.html">
-							<img src="http://cmsintranet.airfrance.fr/charte_v03_001_afklm/img/logo/af_klm_new.gif">
-						</a>
-						<button type="button" class="btn pull-right btn-default">Logout</button>
-				</div>
-				<div id="bandeau" class="row">
-					<h1 translate>generic.title</h1>
-				</div>
-			</div>
-		</header>
-		<!--header -->
-		<div ng-view ng-cloak id="container"></div>
-	</div>
+<div id="wait_container" ng-show="actionWaiting > 0">
+    <div id="wait">
+        <div class="f_circleG" id="frotateG_01"></div>
+        <div class="f_circleG" id="frotateG_02"></div>
+        <div class="f_circleG" id="frotateG_03"></div>
+        <div class="f_circleG" id="frotateG_04"></div>
+        <div class="f_circleG" id="frotateG_05"></div>
+        <div class="f_circleG" id="frotateG_06"></div>
+        <div class="f_circleG" id="frotateG_07"></div>
+        <div class="f_circleG" id="frotateG_08"></div>
+    </div>
+</div>
+<div id="responsive" responsive ng-model="responsive"></div>
+<div id="page-site">
+    <!-- debut header -->
+    <div class="container" id="header">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-left"><span class="logo-af-klm"></span></div>
+                <div class="pull-right"><a href="#"><i class="fa fa-sign-out fa-2x sign-in-out"></i></a></div>
+            </div>
+        </div>
+
+    </div>
+    <!--header -->
+
+    <!-- debut bandeau -->
+    <div class="container-fluid bandeau-medium" id="bandeau">
+
+        <div class="row">
+            <div class="col-xs-12"><img src="assets/app_components/img/bandeau_medium.png" /></div>
+        </div>
+
+    </div>
+    <!-- fin bandeau -->
+
+    <div ng-view ng-cloak id="contenu" class="container"></div>
+</div>
 </body>
 </html>
