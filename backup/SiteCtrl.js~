@@ -8,10 +8,9 @@ angular.module('Ngwis.Controllers')
 		$scope.startWait()
 		var actus = $scope.actus = ActuService.list({brancheName:brancheName});
 		//actus.$then($scope.endWait);
-actus.$then(function() {
-    console.log(actus);
-    $scope.endWait();
-})
+        actus.$then(function() {
+            $scope.endWait();
+        })
 	}
 
 	$scope.startWait()
@@ -83,7 +82,10 @@ actus.$then(function() {
 	**/
 	
 	$scope.columns = [
-	                  {type: 'text', field:'actuFile', header:'actu.name', width:2, readonly: false, mandatory:true, message:'alphabétique', transform:"capitalize", exclamation_mark:'draft'},
+	                  {type: 'text', filter: 'basic', field:'actuFile', header:'actu.name', width:2, readonly: false, mandatory:true, message:'alphabétique', transform:"capitalize", exclamation_mark:'draft'},
+	                  {type: 'text', filter : 'basic', field:'titreFr', header:'actu.titreFr', width:2, readonly: false, mandatory:false, hidden:true},
+	                  {type: 'text', filter : 'basic', field:'titreEn', header:'actu.titreEn', width:2, readonly: false, mandatory:false, hidden:true},
+	                  {type: 'text', field:'redacteur', header:'actu.redacteur', width:2, readonly: false, mandatory:false},
 	                  {type: 'date', field:'actuDate', header:'actu.publication_date', width:2, readonly: false, mandatory:false}
 		             ];
 	

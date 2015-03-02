@@ -1,0 +1,37 @@
+<!DOCTYPE HTML >
+<%@ page language="java" %>
+<%@ page import="org.apache.regexp.*" %>
+<%@ taglib uri="/WEB-INF/tlds/IWAirfrance.tld" prefix="af" %>
+<%@ taglib uri="/WEB-INF/tlds/xtags.tld" prefix="xtags" %>
+<%-- **************************************************************** --%>
+<%-- Description : <dcrtype>_<lang>                                   --%>
+<%-- **************************************************************** --%>
+<%-- Initialises parameters and calls content    		               --%>
+<%-- **************************************************************** --%>
+<%-- Auteurs    | Date       | Description                            --%>
+<%-- SChrisment | 12/12/2014 | Creation                               --%>
+<%-- **************************************************************** --%>
+
+<%-- SETTINGS FOR PAGE : ATTENTION DIFFERENT FOR FR or EN file --%>
+<% String preferredLanguages = "fr|en"; %>
+
+<af:pt name="recherche_fr.tpl" id="dcrFiche" dcrFileName="<%= (String)request.getParameter("dcr") %>">
+
+	<%-- Initialise parameters --%>
+	<af:initTplParams />	
+	<af:setTplParams key="preferredLanguages" value="<%=preferredLanguages%>" />
+	
+	<%-- CONFIGURATION notamment recup des params du ConfigSite --%>
+	<jsp:include page="<%= "../../../../admin/includeTpl/config_main.tpl" %>" flush="true" /> 
+
+	<html>
+		<%-- HEAD --%>	
+		<head>	
+			<jsp:include page="<%= "../../../../admin/includeTpl/head_main.tpl" %>" flush="true" />		
+		</head>	
+	  <%-- CONTENT --%>
+		<jsp:include page="<%="recherche.tpl"%>" flush="true" />		
+	</html>
+
+</af:pt>
+

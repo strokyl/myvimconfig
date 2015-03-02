@@ -1,0 +1,103 @@
+<!-- on itère sur les resultats -->
+{{#results}}
+    <div class="container-fluid container-widget-actualite xl-margin-top">
+        {{#interne}}
+        <div class="row">
+            <div class="col-xs-12 col date-info">
+                {{#formatDate}}{{creation}}{{/formatDate}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col actu-titre">
+                {{titre}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col">
+                {{&snippet}}
+            </div>
+        </div>
+
+        <div class="row medium-margin-top actu-footer">
+
+            <div class="col-xs-6 col">
+                <a href="{{url}}">
+                    <button class="btn btn-primary" type="button">
+                        <span class= "lire-la-suite">
+                            <span class="icon-af icon-af-B-digital-oeil-explorer"></span>
+                            Lire la suite
+                        </span>
+                    </button>
+                </a>
+            </div>
+
+            <div class="col-xs-6 text-right col">
+                <span class="actu-footer-tag-1">{{theme1}}</span>
+
+                {{#theme2}}
+                <span class="actu-footer-tag-2">{{theme2}}</span>
+                {{/theme2}}
+
+                {{#theme3}}
+                <span class="actu-footer-tag-3">{{theme3}}</span>
+                {{/theme3}}
+
+                {{#theme4}}
+                <span class="actu-footer-tag-4">{{theme4}}</span>
+                {{/theme4}}
+
+                &nbsp;
+                <span class="icon-af icon-af-B-digital-oeil-explorer"></span>
+                &nbsp; {{numVues}} vues&nbsp;
+                <span class="fa fa-star favori_star" data-favori-url="{{url}}"></span>
+            </div>
+        </diV>
+        {{/interne}}
+        {{^interne}}
+        <div class="row">
+            <div class="col-xs-12 col date-info">
+                {{#formatDate}}{{date}}{{/formatDate}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col actu-titre">
+                {{&title}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col">
+                {{&snippet}}
+            </div>
+        </div>
+
+        <div class="row medium-margin-top actu-footer">
+
+            <div class="col-xs-6 col">
+                <a href="{{urlEncoded}}" target="_blank">
+                    <button class="btn btn-primary" type="button">
+                        <span class= "lire-la-suite">
+                            <span class="icon-af icon-af-B-digital-oeil-explorer"></span>
+                            {{#interne_document}}
+                                Ouvrir
+                            {{/interne_document}}
+                            {{^interne_document}}
+                                Lire la suite
+                            {{/interne_document}}
+                        </span>
+                    </button>
+                </a>
+            </div>
+
+            <div class="col-xs-6 text-right col">
+                {{#interne_document}}
+                <span class="fa fa-star favori_star" data-title="{{title}}" data-kit="recherche" data-favori-url="{{interneDocument}}"></span>
+                {{/interne_document}}
+            </div>
+        </diV>
+        {{/interne}}
+    </div>
+{{/results}}

@@ -1,0 +1,39 @@
+angular.module("Ngwis.Directives").directive("mydatepicker", ['$filter',
+    function($filter) {
+        return {
+            restrict: 'E',
+            templateUrl : 'template/mydatepicker.html',
+            scope : {
+                inputId : '@',
+                date : '=',
+                name : '@?',
+                format : '@?',
+                closeText : '@?',
+            },
+            controller : function($scope) {
+                $scope._closeText = $scope.closeText || "Fermer";
+                $scope._date = $scope.date;
+                $scope._format = $scope.format || "yyyy-MM-dd";
+                $scope.dateOpened = false;
+
+                $scope.$watch("_date", function(newDate, oldDate) {
+                    $scope.date = $filter('date')(newDate, $scope._format);
+                });
+                
+                $scope.$watch("date", function(newDate, oldDate) {
+                	if($filter('date')($scope._date, $scope._format) !== newDate) {
+                		$scope._date = newDate;
+                	}
+                });
+
+                $scope.openDate = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.dateOpened = true;
+                };
+
+                
+                console.log($scope.format)
+            }
+        }
+}]);

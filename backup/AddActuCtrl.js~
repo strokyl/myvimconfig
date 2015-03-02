@@ -6,7 +6,7 @@ var AddActuCtrl = function ($scope, $injector, $routeParams, $translate, $locati
 	
 	$scope.actuFile = "";
 	
-	$scope.actu = {fr:true, en:false, actuDate : new Date(), "@type" : "middlePack"};
+	$scope.actu = {fr:true, en:false, actuDate : new Date()};
 	
 	$scope.advanced = false;
 	
@@ -23,9 +23,14 @@ var AddActuCtrl = function ($scope, $injector, $routeParams, $translate, $locati
          };
 
 	$injector.invoke(EditActuCtrl, this, injectorParam);
+
+    $scope.branche.$then(function(response) {
+        var branche = response.data;
+        $scope.actu["@type"] = branche["@type"];
+    });
 };
 
 AddActuCtrl.prototype = Object.create(EditActuCtrl.prototype);
 
 angular.module('Ngwis.Controllers')
-.controller('AddActuCtrl', ['$scope', '$injector', '$routeParams', '$translate', '$location', '$window', 'BrancheService', 'ActuService', 'ImageService', 'ActuForm']);
+.controller('AddActuCtrl', ['$scope', '$injector', '$routeParams', '$translate', '$location', '$window', 'BrancheService', 'ActuService', 'ImageService', 'ActuForm', AddActuCtrl]);

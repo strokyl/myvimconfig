@@ -1,0 +1,131 @@
+var ngwisen_EN = {
+	
+	menu : {
+		home : "Home",
+		user : "User",
+		select : "Selection"
+	},
+	generic : {
+		filter: "Filter",
+		title :"MyActu",
+		search : "Search",
+        save : "Save",
+        name : "Name",
+        cancel : "Cancel",
+        date : "Date",
+        size : "Size",
+        dimension : "Dimension",
+        french : "French",
+        english : "English",
+		error : {
+			db : {
+				unique : "A element with this code already exists",
+				unknown : "Unknown technical error",
+			},
+			privilege : "You do not have the right to access thoses data",
+			remove : "This element can not be deleted because it is being used somewhere else",
+			field : {
+				mandatory : "This field is mandatory",
+				mail :"This field should be an email like user@gmail.com",
+				min2 :"This field should contain at least two characters",
+				login:"This field should contain seven characters"
+			},
+
+		},
+	},
+	actu : {
+		name: "News",
+		updated : "The news {{brancheName}}/{{actuFile}} has been updated",
+		publish : "The news {{brancheName}}/{{actuFile}} has been updated",
+		publication_date :"Date of publication",
+		modification_date :"Updated the",
+		draft :"Draft",
+        title: "Title",
+        advancedMode : "Advanced mode",
+        body : "Body",
+        hat : "Hat",
+        one : "one",
+        hot : "hot",
+        fileName : "Name of file",
+        reader : "Reader",
+        sendMail : "Send a email",
+        picture : "Picture",
+        video : "video",
+        sliderPicture : "Slider picture",
+        portailPicture : "Portail picture",
+        theme: "Theme",
+        theme1: "Theme 1",
+        theme2: "Theme 2",
+        theme3: "Theme 3",
+        unitSite : "Unit site",
+        redacteur : "Writer",
+		deleted : "The news {{brancheName}}/{{actuFile}} has been deleted"
+	},
+	user : {
+		birthday : "Date of birthday", 
+		created : "The user {{param0}} has been created",
+		deleted : "The user {{param0}} has been deleted",
+		updated : "The user {{param0}} has been updated",
+		first_name : "First name",
+		last_name : { 
+			last_name: "Last name",
+			filter:"Last name"
+		},
+		login: { 
+			login: "Login",
+			filter: "Login"
+		},
+		mail : "Mail",
+		error : {
+			db : {
+				unique : "A user with this login already exists"
+			}
+		},
+		site : {
+			site : "Website",
+			filter : "Website"
+		}
+	},
+	example : {
+		rating:"rating",
+		left_button1:"Button left 1",
+		left_button2:"Button left 2",
+		right_button1:"Button right 1",
+		right_button2:" Button right 2",
+		comment:"field field-access-keys='AK_ADMIN'",
+		monday: "wis-date weekday:1",
+		code:"wis-text capitalize",
+		activityRate:"wis-number %",
+		loadWorkerNumber:"wis-number",
+		rttWeekHours:"wis-text time",
+		error: {
+			activityRate: "Between 0 and 100%",
+			code:"F, V, 2 or 4 then 3 caractères",
+			comment: '4000 caractere maximum',
+			instanceWorkerNumber: "1 or more",
+			loadWorkerNumber: "1 or more",
+			previousCode:"F, V, 2 or 4 and 3 digit",
+			rttWeekHours: "hh:mm",
+			monday:"Choose a monday"
+		},
+	},
+    site : {
+        changerDeSite : "Change website",
+        choisirBranche : "Choose a website"
+    },
+    actuForm : {
+        publish : "Publish",
+        apercu : "Overview",
+        newActu : "New news",
+        error : {
+            notfound :"News can not be found"
+        }
+    },
+    gallery : {
+        addPicture : "Add a picture",
+        addVideo : "Add a video",
+        choosePicture : "Choose a picture",
+        chooseVideo : "Choose a video"
+        filter : "Filter pictures of {{imageWidth}}px"
+    }
+};

@@ -1,6 +1,6 @@
 <div class="form-group">
     <label for="{{fieldId}}" class="col-sm-2 control-label">
-        {{label}}
+        {{label|translate}}
     </label>
 
 
@@ -31,7 +31,8 @@
         </textarea>
 
         <!-- Textarea -->
-        <textarea ng-switch-when="textarea"
+        <textarea
+            ng-switch-when="textarea"
             data-ng-model="resource[fieldId]"
             type="text"
             class="form-control"
@@ -40,8 +41,8 @@
         >
         </textarea>
 
-        <!-- Image -->
-        <div ng-switch-when="image">
+        <!-- Gallery -->
+        <div ng-switch-when="gallery">
 
             <div class="col-sm-2">
 
@@ -49,35 +50,45 @@
                     type="button"
                     id="{{fieldId}}"
                     class="btn btn-default"
-                    data-ng-click="openGallerie(fieldId)"
+                    data-ng-click="openGallerie(fieldId, files, brancheName, filetype)"
+                    ng-switch='filetype'
                 >
-                    Choisir l'image
+
+                    <span ng-switch-when='video' translate>gallery.chooseVideo</span>
+                    <span ng-switch-when='image' translate>gallery.choosePicture</span>
+                    <span ng-if="imageWidth">({{imageWidth}}px)</span>
                 </button>
 
             </div>
 
             <!--  Aperçu de la vignette -->
-            <div class="imageForm col-sm-8">
-                <img src="{{resource[fieldId]}}" style="max-width: 500px" />
+            <div class="imageForm col-sm-8" ng-switch="filetype">
+                <img src="{{resource[fieldId].url}}" style="max-width: 500px" ng-switch-when="image" tooltip="{{resource[fieldId].name}} {{resource[fieldId].width}}x{{resource[fieldId].height}} {{resource[fieldId].size | fileSize}}"/>
+
+                <div ng-switch-when="video">
+                    <myvideo src="{{resource[fieldId].url}}" />
+                </div>
+
+
+                </div>
+
             </div>
 
-        </div>
-
-        <!-- Checkbox -->
-        <input ng-switch-when="checkbox"
+            <!-- Checkbox -->
+            <input ng-switch-when="checkbox"
             id="{{fieldId}}"
             type="checkbox"
             ng-model='resource[fieldId]'
-        />
-        
+            />
 
-        <!-- Text -->
-        <input ng-switch-default
+
+            <!-- Text -->
+            <input ng-switch-default
             id="{{fieldId}}"
             type="{{type}}"
             class="form-control"
             ng-model='resource[fieldId]'
-        />
-    </div>
+            />
+        </div>
 
-</div>
+    </div>

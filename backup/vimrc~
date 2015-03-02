@@ -17,7 +17,7 @@ set hidden
 set visualbell
 set cursorline
 set ttyfast
-let mapleader = ","
+let mapleader = " "
 nnoremap / /\v
 vnoremap / /\v
 set ignorecase
@@ -65,3 +65,11 @@ set backupdir=~/.vim/backup
 set noswapfile
 
 map <Leader>t :CtrlP<CR>
+
+" EasyMap
+nmap <Leader><Leader><Leader> <Plug>(easymotion-jumptoanywhere)
+xmap <Leader><Leader><Leader> <Plug>(easymotion-Jumptoanywhere)
+omap <Leader><Leader><Leader> <Plug>(easymotion-Jumptoanywhere)
+
+nmap <Leader>o o<ESC>
+nmap <Leader>O O<ESC>

@@ -1,27 +1,40 @@
 /**
  * 
  */
-var EditActuCtrl = function ($scope, $routeParams, $translate, $location, $window, BrancheService, ActuService, ImageService, ActuForm) {
+var EditActuCtrl = function ($scope, $routeParams, $translate, $location, $window, BrancheService, ActuService, FileService, ActuForm) {
 
 	this.scope = $scope;
 
     //usefull for the form directive because of the gallery that upload image to the 
     //branche folder
-	$scope.brancheName = $routeParams.brancheName;
+	var brancheName = $scope.brancheName = $routeParams.brancheName;
 
     //usefull for the form directive because of the gallery that upload image to the 
     //branche folder
-	$scope.images = ImageService.getAll({brancheName:$routeParams.brancheName});
+    //$scope.images = FileService.getImages({brancheName:brancheName});
+
+    //$scope.video = FileService.getVideos({brancheName:brancheName});
+
+    //$scope.video.$then(function(response) {
+        //var videos = response.data;
+        //console.log("Videos", videos);
+    //})
 
 	var themes = [];
+    var unitSites = [];
 
 	$scope.startWait();
-	var themesPromise =  BrancheService.themes({brancheName:$routeParams.brancheName});
+	var branchePromise =  $scope.branche = BrancheService.get({brancheName:$routeParams.brancheName});
 	
-	themesPromise.$then(function (data) {
+	branchePromise.$then(function (data) {
+        var actu = data.data;
 
-        for (var i = 0; i < data.data.length; i++) {
-            themes.push(data.data[i]);
+        for (var i = 0; i < actu.themes.length; i++) {
+            themes.push(actu.themes[i]);
+        };
+
+        for (var i = 0; i < actu.themes.length; i++) {
+            unitSites.push(actu.unitSites[i]);
         };
 
 		if(!$scope.actu.actuTheme) {
@@ -32,35 +45,16 @@ var EditActuCtrl = function ($scope, $routeParams, $translate, $location, $windo
 
 	});
 
-	$scope.startWait();
-	var unitSitesPromise =  BrancheService.unitsites({brancheName:$routeParams.brancheName});
-	
-    var unitSites = [];
-	unitSitesPromise.$then(function (data) {
-        for (var i = 0; i < data.data.length; i++) {
-            unitSites.push(data.data[i]);
-        };
-		if(!$scope.actu.unitSite) {
-			$scope.actu.unitSite = data.data[0];
-		}
-
-		$scope.endWait();
-	});
-	
-
 	
 	this.scope.saveChange = angular.bind(this, this.saveChange, ActuService, $translate, $location);
 	this.scope.publish = angular.bind(this, this.publish, ActuService, $translate, $location);
 	this.scope.apercu = angular.bind(this, this.apercu, ActuService, $translate, $location, $window);
 	this.scope.cancel = angular.bind(this, this.cancel, $location);
 	
-    if($scope.actu["@type"]) {
-        $scope.form = ActuForm.getForm(data.data["@type"], $scope.createActu, themes, unitSites  );
-    } else {
-        this.scope.actu.$then(function(data) {
-            $scope.form = ActuForm.getForm(data.data["@type"], $scope.createActu, themes, unitSites  );
-        });
-    }
+    branchePromise.$then(function(response) {
+        var branche = response.data;
+        $scope.form = ActuForm.getForm($scope.createActu, branche);
+    });
 
 };
 

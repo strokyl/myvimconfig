@@ -3,7 +3,7 @@
         <div class="form-group" ng-repeat="l in form.lang">
 
                 <label for="{{l.id}}" class="col-sm-2 control-label">
-                    {{l.lang}} : 
+                    {{l.lang|translate}} : 
                 </label>
                 
                 
@@ -30,12 +30,13 @@
                     ng-repeat='_id in field.id'
                     ng-show="resource[_id.lang]"
                     data-resource="resource"
-                    data-label="{{field.label}} ({{_id.lang}})"
+                    data-label="{{field.label|translate}} ({{_id.lang}})"
                     data-field-id="{{_id.id}}"
                     data-type="{{field.type}}"
                     data-choices="field.choices"
-                    data-images="images"
-                    data-branche-name="brancheName"
+                    data-files="field.files"
+                    data-filetype="field.filetype"
+                    data-branche-name="field.brancheName"
                 />
 
             </div>
@@ -47,8 +48,9 @@
                     data-field-id="{{field.id}}"
                     data-type="{{field.type}}"
                     data-choices="field.choices"
-                    data-images="images"
-                    data-branche-name="brancheName"
+                    data-files="field.files"
+                    data-filetype="field.filetype"
+                    data-branche-name="field.brancheName"
                 />
             </div>
 

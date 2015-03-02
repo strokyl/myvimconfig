@@ -1,0 +1,48 @@
+angular.module('Ngwis.Directives').directive("myvideo", function() {
+    var randomString = function (length) {
+        return Math.round((Math.pow(36, length + 1) - 
+                Math.random() * Math.pow(36, length))).toString(36).slice(1);
+    }
+	return {
+		restrict : 'E',
+		templateUrl : 'template/myvideo.html',
+		scope : {
+			//the tree
+			src : '=',
+            maxWidth : '@?'
+		},
+		controller : function($scope) {
+
+            $scope.id = randomString(20);
+
+            $scope.maxWidth = $scope.maxWidth || 800;
+
+            var videoPlayer;
+
+            $scope.$watch("src", function(newValue, oldValue) {
+                setTimeout(function() {
+                    if(!newValue) {
+                        return;
+                    }
+
+                    if(!videoPlayer) {
+                        videoPlayer = videojs($scope.id);
+                    } 
+
+                    var extensions = newValue.split(".").pop();
+                    var type;
+                    if(extensions === 'flv') {
+                        type = "video/flv";
+                    } else if (extensions === 'mp4') {
+                        type = "video/mp4";
+                    } else {
+                         console.error("Video.js directive unknow type for extensions : " + extensions);
+                         return;
+                    }
+
+                    videoPlayer.src([{ type: type, src : newValue }]);
+                });
+            });
+		}
+	}
+});

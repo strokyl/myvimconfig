@@ -1,6 +1,6 @@
 'use strict';
 
-var UpdateActuCtrl = function ($scope, $injector, $routeParams, $translate, $location, $window, BrancheService, ActuService, ImageService, ActuForm){
+var UpdateActuCtrl = function ($scope, $sce, $injector, $routeParams, $translate, $location, $window, BrancheService, ActuService, ImageService, ActuForm){
 	//because of the factorisation of the code between createActu et updateActu
 	$scope.createActu = false;
 	
@@ -37,4 +37,4 @@ var UpdateActuCtrl = function ($scope, $injector, $routeParams, $translate, $loc
 UpdateActuCtrl.prototype = Object.create(EditActuCtrl.prototype);
 
 angular.module('Ngwis.Controllers')
-.controller('UpdateActuCtrl', ['$scope', '$injector', '$routeParams', '$translate', '$location', '$window', 'BrancheService', 'ActuService', 'ImageService', 'ActuForm', UpdateActuCtrl]);
+.controller('UpdateActuCtrl', ['$scope', '$sce', '$injector', '$routeParams', '$translate', '$location', '$window', 'BrancheService', 'ActuService', 'ImageService', 'ActuForm', UpdateActuCtrl]);

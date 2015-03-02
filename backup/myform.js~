@@ -6,14 +6,8 @@ angular.module('Ngwis.Directives').directive("myform", function() {
 		restrict : 'E',
 		templateUrl : 'template/myform.html',
 		scope : {
-			//the tree
 			form : '=',
-			//a callback called when a node is clicked
-			myformSubmit : '&',
-			//if this tree is a subtree of an other tree this node will be the father of the first tree'
-			resource : '=',
-            brancheName : "=?",
-            images : "=?"
+			resource : '='
 		},
 		controller : function($scope) {
             $scope.isMulltyLang = function(field) {
@@ -23,8 +17,6 @@ angular.module('Ngwis.Directives').directive("myform", function() {
             $scope.showIf = function(field) {
                 return !field.displayIf || $scope.resource[field.displayIf];
             }
-
-            console.log($scope.form);
 		}
 	}
 }).directive("myfield", ['$modal', function($modal) {
@@ -36,29 +28,46 @@ angular.module('Ngwis.Directives').directive("myform", function() {
             label : '@',
             type : '@',
             resource : '=',
-            images : "=?",
+            files : "=?",
+            filetype : "=?",
+            imageWidth : "=?",
             brancheName : "=?",
             choices : "=?"
         },
         controller : function($scope) {
 
-            $scope.openGallerie = function(field) {
+            $scope.getFileName = function(url) {
+                if(url) {
+                    return url.split("/").pop();
+                }
+            }
+
+            $scope.openGallerie = function(field, files, brancheName, filetype) {
+                console.log("imageWidth", $scope.imageWidth);
                 var modalInstance = $modal.open({
                     templateUrl :'template/gallery.html',
                     controller : 'GalleryCtrl',
                     size: "lg",
                     resolve: {
-                        images: function () {
-                            return $scope.images;
+                        files: function () {
+                            return files;
                         },
                         uploadUrl: function () {
-                            return "resources/images/" + $scope.brancheName;
+                            var url = "resources/files/" + $scope.brancheName + $scope.imageWidth ? "/" + $scope.imageWidth : "";
+                            console.log("url", url);
+                            return url;
+                        },
+                        filetype : function () {
+                            return filetype;
+                        },
+                        imageWidth : function() {
+                            return $scope.imageWidth;
                         }
                     }
                 });
                 
                 modalInstance.result.then(function(selectedImage) {
-                    $scope.resource[$scope.fieldId] = selectedImage.url;
+                    $scope.resource[$scope.fieldId] = selectedImage;
                 });
             };
 

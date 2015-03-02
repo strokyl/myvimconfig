@@ -1,0 +1,142 @@
+/**
+ * This directive display a TeamSite gallery in order to choose picture from a
+ * branche
+ */
+angular
+		.module('Ngwis.Controllers')
+		.controller(
+				"GalleryCtrl",
+				[
+						'$scope',
+						'$filter',
+						'$modalInstance',
+                        '$rootScope',
+						'FileUploader',
+						'files',
+						'uploadUrl',
+						'filetype',
+						'imageWidth',
+						function($scope, $filter, $modalInstance, $rootScope, FileUploader,
+								files, uploadUrl, filetype, imageWidth) {
+
+							// a wrapper around choose file to deal with intern
+							// stuff
+							// like closing the gallery when the image is choose
+							$scope.chooseFile = function(image) {
+                                console.log("Image", image);
+								$modalInstance.close(image);
+							}
+
+                            $scope.filetype = filetype;
+
+                            $scope.widthFilter = true;
+
+                            $scope.imageWidth = imageWidth;
+
+                            $scope.translateImageWidth = {
+                                imageWidth : imageWidth
+                            };
+
+                            var selectedFOlderUrl = "";
+
+                            if(files.$resolved === false || files.resolved === false) {
+                                $rootScope.startWait();
+                                var then = files.then || files.$then;
+
+                                then(function() {
+                                    $rootScope.endWait();
+                                })
+                            }
+
+                            $scope.imageFilter = function(image) {
+                                return !$scope.widthFilter || !imageWidth || image.width == imageWidth;
+                            };
+
+							var typeFilter = {
+								name : 'imageFilter',
+								fn : function(item /* {File|FileLikeObject} */,
+										options) {
+                                        var type = item.type.split("/").pop() || item.name.split(".").pop();
+
+                                    var acceptedType = "";
+                                    if(filetype === "video") {
+                                        acceptedType = ["flv", "avi", "mp4"];
+                                    } else if (filetype === "image") {
+                                        acceptedType = ["jpg","png","jpeg","bmp","gif"];
+                                    } else {
+                                        console.error("Unknow file type for gallery: "+ filetype);
+                                    }
+									var result = acceptedType.indexOf(type) !== -1;
+                                    return result;
+								}
+							};
+
+							$scope.uploader = new FileUploader({
+								url : uploadUrl,
+								queueLimit : 1,
+								removeAfterUpload : true,
+								autoUpload : true,
+								onSuccessItem : function(item, response) {
+									// we put the image in the selected folder
+									$scope.selectedImages.unshift(response);
+                                    $scope._origineChildrenArray.unshift(response);
+                                    console.log("Gallery upload response", response);
+								},
+								filters : [ typeFilter ]
+							});
+
+							// for internal reason we need to modify the tree
+							// given by the webservice
+							// we want to separe son's folder and son's image
+							// in order that tree directive doesn't display
+							// image in the tree
+                            //
+                            // moreover we filter the image which does not have
+                            // the correct width
+							var correctTree = function(source) {
+								var result = {}
+								result.name = source.name;
+								result.url = source.url;
+								result.files = [];
+                                result._origineChildrenArray = source.children;
+								result.children = [];
+								for (var i = 0; i < source.children.length; i++) {
+									var child = source.children[i];
+									if (child.children) {
+										result.children
+												.push(correctTree(child));
+									} else {
+										result.files.push(child);
+                                    }
+								}
+
+								return result;
+							}
+
+							// this function is called when a user select a
+							// folder
+							$scope.selectNode = function(node) {
+								$scope.selectedImages = node.files;
+                                $scope._origineChildrenArray = node._origineChildrenArray;
+								$scope.selectedFolder = node.name;
+                                selectedFOlderUrl = node.url;
+								$scope.uploader.formData = [ {
+									'url' : node.url
+								} ];
+							};
+
+
+							$scope.cancel = function() {
+								$modalInstance.dismiss('cancel');
+							}
+
+
+							files.$then(function(response) {
+								var originalTree = response.data;
+								newTree = correctTree(originalTree);
+								$scope.tree = newTree;
+								$scope.selectNode(newTree);
+								return newTree;
+							});
+
+						} ]);

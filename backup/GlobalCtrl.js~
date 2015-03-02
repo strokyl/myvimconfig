@@ -1,0 +1,68 @@
+'use strict';
+//creation of the module controller
+angular.module('Ngwis.Controllers',['Ngwis.Services'])
+.controller('GlobalCtrl', ['$http','$scope', '$translate', '$timeout', '$rootScope', function($http,$scope, $translate, $timeout, $rootScope) {
+	
+	
+	$scope.accessKeys = $http.get("resources/securities");
+	
+	$scope.accessKeys.then(function (value) { 
+		$scope.userInfo = value.data.userInfo; 
+		}
+	);
+	
+	$scope.hasAccessKey = function(akRight) {
+		return $scope.accessKeys.authorities.indexOf(akRight) > -1;
+	};
+	
+	$scope.actionWaiting = 0;
+	
+	$rootScope.startWait = function() {
+		$scope.actionWaiting++;
+		//$("#wait_container").show();
+	};
+	
+	$rootScope.endWait = function() {
+		$scope.actionWaiting--;
+		//$("#wait_container").hide();
+	};
+
+	$rootScope.onError = function(error, cols) {
+		var msg = "";
+		if (error.status==400) {
+			angular.forEach(error.data, function(error) {
+				if(angular.isDefined(error.field)) {
+					angular.forEach(cols, function (col) {
+						if (error.field == col.field) {
+							msg+=$translate(col.header)+" - ";
+						}
+					});
+				}
+				msg+=$translate(error.message)+"\n";
+			});
+		} else if (error.status==500) {
+			if(error.data.label && error.data.detailMessage) {
+				//in case the error is properly formatted
+				msg = error.data.label+"\n"+error.data.detailMessage;
+			}
+			else {
+				//in case the error is not properly formated
+				msg = error.data;
+			}
+		}
+		$scope.endWait();
+		alert(msg);
+	};
+	
+	
+	$scope.flashMessage = function (message, time) {
+		if(!time) {
+			time = 3000;
+		}
+		$scope.message= message;
+		$timeout(function(){$scope.message="";}, time);
+	}
+
+
+		
+}]);

@@ -1,0 +1,187 @@
+<div class="container">
+    <div class="row filter filter-without-border">
+        <div class="col-md-2 col-md-offset-10 input-group input-group-sm"
+            ng-if="genericfilter===true">
+            <span class="input-group-addon"> <span
+                class="icon-af icon-af-B-digital-loupe-recherche"></span>
+            </span> <input type="text" class="form-control"
+                placeholder="{{'generic.search'|translate}}"
+                ng-model="criteria.filter">
+        </div>
+    </div>
+	<div class="row filter"
+		ng-class="{'filter-without-border':genericfilter===true}"
+		ng-show='someFilter()'>
+<!-- 		<div class="filter-title" translate ng-if="genericfilter!==true">generic.filter</div> -->
+		<form>
+			<div class="field col-md-2"
+				ng-repeat="col in columns|filter:{options.length : '!0'}|filter:{options.length : '!1'}"
+				ng-show="genericfilter!==true && !!col.filter">
+				<label>{{col.header+'.filter'|translate}}</label> <select
+					ng-model="criteria[col.field]"
+					ng-options="s.value as s.label for s in col.options"
+					ng-if="col.type=='select'||col.type=='selectChange'">
+					<option value="">----</option>
+				</select> <input ng-model="criteria[col.field]"
+					ng-if="col.type!='select'&&col.type!='selectChange'" />
+			</div>
+		</form>
+	</div>
+	<div class="clear"></div>
+	<div class="row">
+		<table class="table table-blueaf">
+			<thead>
+				<tr ng-repeat="line in headers">
+					<th ng-repeat="col in line"
+                        data-ng-if="!col.hidden"
+						rowspan="{{col.group?1:headers.length-$parent.$index}}"
+						colspan="{{ col.group?col.colspan:1 }}">
+						<div>
+							<div>
+								<wis-sort ng-if="!col.group" sortdir="orderby.reverse"
+									sortedby="orderby.field" sortvalue="{{ col.field }}"
+									onsort="sort" ng-if="col.type != 'button'">{{
+								col.header | translate }}</wis-sort>
+								<span ng-if="col.group">{{ col.header | translate }}</span>
+							</div>
+						</div>
+					</th>
+					<th ng-if="edit && pageAccess && $index==0"
+						rowspan="{{ headers.length }}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="line show-list-animation" ng-repeat="item in pageItems()"
+					ng-init="over = false" ng-mouseenter="over=true;mouseEnter(item)"
+					ng-mouseleave="over=false;mouseLeave(item)"
+					ng-mousemove="updateInfobule($event)">
+					<td ng-repeat="col in columns"
+                        data-ng-if="!col.hidden"
+                        ng-switch on="col.type"
+						ng-class="{true:col.class}[!!col.class]"
+                    >
+                        <span class="infobulle" ng-if="$first" ng-show="over && textOver" ng-style="infobulePosition">{{textOver(item)}}</span>
+						<form name="updateForm" data-ng-if="inlineEdit">
+							<input ng-class="{true:'read'}[item.update]"
+								ng-disabled="col.readonly || !item.update"
+								ng-show="!col.url || item.update" ng-model="item[col.field]"
+								ng-switch-when="text" wis-text transform="{{col.transform}}"
+								pattern="{{col.pattern}}" ng-required="col.mandatory" /> <input
+								ng-class="{true:'read'}[item.update]"
+								ng-disabled="col.readonly || !item.update"
+								ng-model="item[col.field]" ng-switch-when="number"
+								min='{{col.min}}' max='{{col.max}}' ng-required="col.mandatory" />
+							<input ng-class="{true:'read'}[item.update]"
+								ng-disabled="col.readonly || !item.update"
+								ng-model="item[col.field]" ng-switch-when="date" wis-date
+								weekday='{{col.weekday}}' ng-required="col.mandatory" /> <input
+								ng-class="{true:'read'}[item.update]"
+								ng-disabled="col.readonly || !item.update"
+								ng-model="item[col.field]" ng-switch-when="boolean"
+								type="checkbox" /> <select ng-switch-when="select"
+								ng-model="item[col.field]"
+								ng-disabled="col.readonly || !item.update"
+								ng-options="t.value as t.label for t in col.options">
+								<option value="">----</option>
+							</select> <select field ng-switch-when="selectChange"
+								ng-class="{true:'read'}[item.update]" ng-model="item[col.field]"
+								ng-disabled="col.readonly || !item.update"
+								ng-options="t.value as t.label for t in col.options"
+								ng-change="change(item[col.field])">
+								<option value="">----</option>
+							</select> <span class="error" ng-if="item.update"
+								ng-show="updateForm.$invalid">! {{col.message |
+								translate}} </span> <a class="color_blueklm" ng-switch-when="text"
+								ng-show="!!col.url && !item.update" ng-model="item[col.field]"
+								href="#/{{col.url}}/{{item[col.id]}}"><p>{{item[col.field]}}</p></a>
+						</form>
+						<span data-ng-if="!inlineEdit">
+                            <span ng-switch-when="boolean">
+                                <span class="icon-af icon-af-A-basic-exclamation9" ng-if="item[col.field]"></span>
+                            </span>
+                            <span ng-switch-default>
+                                <span class="icon-af icon-af-A-basic-exclamation9" data-ng-if="col.exclamation_mark && item[col.exclamation_mark]">
+                                </span>
+    							{{item[col.field]}}
+                            </span>
+						</span>
+						</td>
+					<td ng-if="edit && pageAccess" class="buttons">
+						<button ng-if="inlineEdit" ng-hide="item.update"
+							class="btn btn-default btn-xs" ng-click="item.update=true"
+							translate>
+							<span class="glyphicon glyphicon-pencil"></span>
+						</button>
+						<button ng-show="item.update" class="btn btn-default btn-xs"
+							ng-disabled="check(item,columns)"
+							ng-click="update(item); item.update=false">
+							<span class="glyphicon glyphicon-ok"></span>
+						</button>
+						<button ng-hide="item.update || !remove"
+							class="btn btn-default btn-xs" ng-click="remove(item)">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+						<button ng-repeat="button in otherButtons"
+							class="btn btn-default btn-xs" ng-click="button.callback(item)">
+							<span class="{{button.class}}"></span>
+						</button>
+					</td>
+				</tr>
+				<tr ng-if="addMoreInline && pageAccess">
+					<td ng-repeat="col in columns" ng-switch on="col.type">
+						<form name="addForm">
+							<input ng-disabled="col.displayonly"
+								ng-model="additem[col.field]" ng-switch-when="text" wis-text
+								transform="{{col.transform}}" pattern="{{col.pattern}}"
+								ng-required="col.mandatory" /> <input
+								ng-disabled="col.displayonly" ng-model="additem[col.field]"
+								ng-switch-when="number" min='{{col.min}}' max='{{col.max}}'
+								ng-required="col.mandatory" /> <input
+								ng-disabled="col.displayonly" ng-model="additem[col.field]"
+								ng-switch-when="date" wis-date weekday='{{col.weekday}}'
+								ng-required="col.mandatory" /> <input
+								ng-disabled="col.displayonly" ng-model="additem[col.field]"
+								ng-switch-when="boolean" type="checkbox" /> <select field
+								ng-disabled="col.displayonly" ng-switch-when="select"
+								ng-model="additem[col.field]"
+								ng-options="t.value as t.label for t in col.options"
+								ng-required="col.mandatory">
+								<option value="">----</option>
+							</select> <select field ng-disabled="col.displayonly"
+								ng-switch-when="selectChange" ng-model="additem[col.field]"
+								ng-options="t.value as t.label for t in col.options"
+								ng-change="change(additem[col.field])"
+								ng-required="col.mandatory">
+								<option value="">----</option>
+							</select> <input field ng-disabled="col.displayonly" ng-switch-when="link"
+								ng-model="additem[col.field]" type="text"
+								ng-pattern='col.pattern' ng-maxlength="col.maxlength"
+								ng-required="col.mandatory" /> <span class="error"
+								ng-show="addForm.$invalid">! {{col.message | translate}}
+							</span>
+						</form>
+					</td>
+					<td>
+						<button field class="btn btn-default btn-xs"
+							ng-disabled="addForm.$invalid" ng-click="add(additem);">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</td>
+				</tr>
+				<tr ng-if="addMoreButton && pageAccess">
+					<td ng-repeat="col in columns" ng-switch on="col.type" data-ng-if="!col.hidden"</td>
+					<td>
+						<button field class="btn btn-default btn-xs"
+							ng-disabled="addForm.$invalid"
+							ng-click="addMoreButton(criteria);">
+							<span class="icon-af icon-af-A-basic-plus25"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<span wis-pagination number="{{displayedLines}}"
+			items="list | filter:filter() | orderBy:orderby.field:orderby.reverse"></span>
+
+	</div>
+</div>

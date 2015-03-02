@@ -1,0 +1,20 @@
+# Manual hunk edit mode -- see bottom for a quick guide
+@@ -82,7 +82,8 @@ actus.$then(function() {
+ 	**/
+ 	
+ 	$scope.columns = [
+-	                  {type: 'text', field:'actuFile', header:'actu.name', width:2, readonly: false, mandatory:true, message:'alphabétique', transform:"capitalize", exclamation_mark:'draft'},
++	                  {type: 'text', filter: 'basic', field:'actuFile', header:'actu.name', width:2, readonly: false, mandatory:true, message:'alphabétique', transform:"capitalize", exclamation_mark:'draft'},
++	                  {type: 'text', field:'redacteur', header:'actu.redacteur', width:2, readonly: false, mandatory:false},
+ 	                  {type: 'date', field:'actuDate', header:'actu.publication_date', width:2, readonly: false, mandatory:false}
+ 		             ];
+ 	
+# ---
+# To remove '-' lines, make them ' ' lines (context).
+# To remove '+' lines, delete them.
+# Lines starting with # will be removed.
+#
+# If the patch applies cleanly, the edited hunk will immediately be
+# marked for staging. If it does not apply cleanly, you will be given
+# an opportunity to edit again. If all lines of the hunk are removed,
+# then the edit is aborted and the hunk is left unchanged.

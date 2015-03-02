@@ -1,0 +1,60 @@
+<%@ page language="java" %>
+<%@ page import="org.apache.regexp.*" %>
+<%@ page import="java.io.File" %>
+<%@ taglib uri="/WEB-INF/tlds/IWAirfrance.tld" prefix="af" %>
+<%@ taglib uri="/WEB-INF/tlds/xtags.tld" prefix="xtags" %>
+<%-- **************************************************************** --%>
+<%-- Description : Header - main                                      --%>
+<%-- Includes : js, css                                               --%>
+<%-- **************************************************************** --%>
+<%-- Adds other includes specific for this site                       --%>
+<%-- **************************************************************** --%>
+<%-- Auteurs    | Date       | Description                            --%>
+<%-- SChrisment | 12/01/2014 | Creation 			                        --%>
+<%-- **************************************************************** --%>
+<af:pt name="head_main.tpl" id="dcrFiche">
+	<af:getTplParams key="generationLanguage" id="generationLanguage" />
+	<af:getTplParams key="docRoot" id="docRoot" />
+	<af:getTplParams key="lastEdition" id="lastEdition" />
+	<af:getTplParams key="backingstore" id="backingstore" />
+	<af:getTplParams key="iwmount" id="iwmount" />
+	
+  <title>Manager</title>
+  <%--A VERIFIER : PROBLEME AVEC ACCENTS <meta charset="utf-8">--%>
+  <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<%-- Bower CSS	--%>
+	<link href="/technical/assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/technical/assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <%-- Custom css --%>
+  <link rel="stylesheet" type="text/css" href="/technical/assets/app_components/css/article.css">
+  <link rel="stylesheet" type="text/css" href="/technical/assets/app_components/css/general/general.css">
+  <link rel="stylesheet" type="text/css" href="/technical/assets/app_components/css/index.css">
+  <link rel="stylesheet" type="text/css" href="/technical/assets/app_components/css/demultiplier.css">
+
+  <%-- Javascript pour supporter IE 8 --%>
+  <script type="text/javascript" src="/technical/assets/bower_components/modernizr/modernizr.js"></script>
+  <script type="text/javascript" src="/technical/assets/bower_components/css3-mediaqueries-js/css3-mediaqueries.js"></script>  
+
+  <%-- NOS INCLUDES A NOUS (JS) : jquery --%>
+	<script type="text/javascript" src="/technical/js/jquery-1.11.1.min.js"></script>
+	<script language="Javascript1.2" src='/technical/js/favoriApi.js'></script>	
+  <script language="Javascript1.2" src='/technical/js/Manager.js'></script>	
+  <script charset="iso-8859-15" src="http://cmsserv.airfrance.fr/ServiceProviderWeb/lib/js/date_utils/v1_01/DateUtils.js"></script>
+
+  <%-- A MODIFIER ***** LES CHEMINS URLS --%>
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+      <script type='text/javascript' src="/technical/assets/bower_components/html5shiv/dist/html5shiv.min.js"></script>      
+      <script type='text/javascript' src="/technical/assets/bower_components/respond/src/matchmedia.addListener.js"></script>
+      <script type='text/javascript' src="/technical/assets/app_components/js/lib/compatibilite_ie_8/matchmedia.polyfill.js"></script>
+      <script type='text/javascript' src="/technical/assets/app_components/js/lib/compatibilite_ie_8/respond.js"></script>
+  <![endif]-->
+
+  <script type="text/javascript" src="/technical/assets/bower_components/angularjs/angular.js"></script>
+  <script type="text/javascript" src="/technical/assets/bower_components/bootstrap/dist/angular/ui-bootstrap-tpls-0.12.0.js"></script>
+
+   
+</af:pt>   

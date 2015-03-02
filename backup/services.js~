@@ -10,9 +10,8 @@ angular.module('Ngwis.Services', ['ngResource']).
 		}).
 		factory('BrancheService', function ($resource) {
 			return $resource('resources/branches/', {}, {
-            	'list': { method: 'GET', isArray: true },
-				'themes' : { method : 'GET', isArray : true, url:'resources/branches/themes/:brancheName'},
-            	'unitsites' : { method : 'GET', isArray : true, url:'resources/branches/unitsites/:brancheName'}
+                'get' : { method : 'GET', url:'resources/branches/:brancheName' },
+            	'list': { method: 'GET', isArray: true }
 			});
 		}).		
 		factory('ActuService', function ($resource) {
@@ -33,9 +32,10 @@ angular.module('Ngwis.Services', ['ngResource']).
                 	}}
 			});
 		}).		
-		factory('ImageService', function ($resource) {
-			return $resource('resources/images/:brancheName/', {}, {
-            	'getAll': { method: 'GET'},
+		factory('FileService', function ($resource) {
+			return $resource('resources/files', {}, {
+            	'getImages': { method: 'GET', url : 'resources/files/images/:brancheName'},
+            	'getVideos': { method: 'GET', url : 'resources/files/videos/:brancheName'}
 			});
 		}).
 		factory('Criteria', function() {

@@ -1,0 +1,145 @@
+//if this script is imported it will provide
+//an object Favori that allow to retrieve, post and delete favori
+//to the server
+(function () {
+    
+    Favori = {};
+
+
+    var FAVORI_URL = '/rest/favori';
+
+    //allow use to store in memory the red stars
+    var isFavoredMap = {remove:null, post:null, getAll:null, setFavori:null};
+
+    //this is the Jquery selector in order to get all the stars icons
+    var span_star_selector = "span.favori_star[data-favori-url]";
+
+
+    var setRed = function(star) {
+	var _star = $(star);
+        _star.css('color', 'red');
+        _star.attr('data-original-title', 'Supprimer des favoris');
+    };
+
+    var setBlack = function(star) {
+	var _star = $(star);
+        _star.css('color', '');
+        _star.attr('data-original-title', 'Ajouter aux favoris');
+    };
+
+    var getAll = Favori.getAll = function(success, error) {
+
+        $.ajax({
+            'dataType': 'json',
+            type: 'GET',
+            cache:false,
+            url: FAVORI_URL
+        }).done(function(data) {
+            if(!data || !data.favoris) {
+                success([]);
+            } else {
+                var favoris = [].concat(data.favoris);
+                success(favoris);
+            }
+        }).error(error);
+    };
+
+    //remove and not delete because delete is a javascript reserved word
+    var remove = Favori.remove = function(favori, success, error) {
+        var favoriJson = JSON.stringify(favori);
+        $.ajax({
+            'dataType': 'json',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-HTTP-Method-Override', 'DELETE');
+            },
+            type: 'POST',
+            contentType : 'application/json',
+            data:favoriJson,
+            url: FAVORI_URL
+        }).done(success).error(error);
+    };
+
+    var post = Favori.post = function(favori, success, error) {
+        var favoriJson = JSON.stringify(favori);
+        $.ajax({
+            'dataType': 'json',
+            type: 'POST',
+            contentType : 'application/json',
+            data:favoriJson,
+            url: FAVORI_URL
+        }).done(success).error(error);
+    };
+
+    //select all the star and set click callback
+    //so that when a star is clicked a favori is posted or deleted 
+    //on the server and the color of the start change
+    var setFavoriCallback = function () {
+        
+        //we loop on each store and set the click callback
+        $(span_star_selector).click(function(event) {
+
+            //we get the jquery object of the start that have been clicked
+            var star = $(event.currentTarget);
+
+            favori = {
+               url : star.attr('data-favori-url'),
+               section : star.attr('data-type'),
+               kit : star.attr('data-kit'),
+               filtre : star.attr('data-filtre'),
+               title : star.attr('data-title'),
+               type : star.attr('data-kit')?'document':'article'
+            }
+
+
+            console.log("Click on ", favori.url);
+            
+            //we retrieve the state of the article (favored or not)
+            var isFavored = isFavoredMap[favori.url];
+
+
+            var sameUrl = $("span.favori_star[data-favori-url='"+ favori.url+"']");
+
+            if(isFavored) {
+
+                Favori.remove(favori, function() {
+                    sameUrl.each(function(_i, star) {setBlack(star)});
+                    isFavoredMap[favori.url] = false;
+                    console.log("Favori supprimé : ", favori.url);
+                });
+            }
+            else {
+                Favori.post(favori, function() {
+                    sameUrl.each(function(_i, star) {setRed(star)});
+                    isFavoredMap[favori.url] = true;
+                    console.log("Favori ajouté : ", favori.url);
+                });
+            }
+
+        });
+    };
+
+    var setFavori = Favori.setFavori = function(menu) {
+        Favori.getAll(function(favoris) {
+
+            //we build a list of urls of all favories
+            var urls = [], 
+                favori;
+
+            for (var i = 0; i < favoris.length; i++) {
+                    urls.push(favoris[i].url);
+            };
+
+            $(span_star_selector).each(function (i, element) {
+                var star = $(element);
+                var url = star.attr('data-favori-url');
+                if($.inArray(url, urls) !== -1) {
+                    isFavoredMap[url] = true;
+                    setRed(star);
+                }
+            });
+
+            setFavoriCallback();
+        })
+    };
+
+})();

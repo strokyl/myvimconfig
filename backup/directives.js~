@@ -1,6 +1,6 @@
 'use strict';
 
-var directives = angular.module('Ngwis.Directives', ["ui.bootstrap"]).directive('ngBlur',
+var directives = angular.module('Ngwis.Directives', ["ui.bootstrap", "ui.tinymce"]).directive('ngBlur',
 		function() {
 			return function(scope, elem, attrs) {
 				elem.bind('blur', function() {
@@ -227,7 +227,8 @@ directives
 							mouseLeave : "=?",
 							// allow to display a text only when the mouse is
 							// over a row
-							textOver : "=?"
+							textOver : "=?",
+                            filter : "=?"
 						},
 						controller : function($scope) {
 							if ($scope.inlineEdit === null
@@ -245,7 +246,18 @@ directives
 									'top' : $event.pageY,
 								}
 							}
-							console.log($scope);
+
+                            //$scope.$watch('filter', function(newValue, oldValue) {
+                                //if(newValue) {
+                                    //$scope.criteria.filter = newValue;
+                                //}
+                            //});
+
+                            $scope.$watch('criteria.filter', function(newValue, oldValue) {
+                                if(newValue) {
+                                    $scope.filter = newValue;
+                                } 
+                            });
 							
 							$scope.someFilter = function () {
 								var cols = $scope.columns;

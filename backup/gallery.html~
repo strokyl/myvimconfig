@@ -1,0 +1,125 @@
+<div class="modal-header">
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+
+    <div class="row">
+
+                <form role="form" class="form-horizontal">
+
+                    <div class="form-group">
+
+                        <div class="col-xs-10 col-xs-offset-1" ng-switch="filetype">
+
+                            <input
+                                ng-switch-when="image"
+                                id="image"
+                                type="file"
+                                data-display-input='false'
+                                data-button-text="{{'gallery.addPicture'|translate}}"
+                                pretty-file-input
+                                nv-file-select
+                                uploader="uploader"
+                                accept="image/*"
+                            />
+
+                            <input
+                                ng-switch-when="video"
+                                id="image"
+                                type="file"
+                                data-display-input='false'
+                                data-button-text='{{"gallery.addVideo"|translate}}'
+                                pretty-file-input
+                                nv-file-select
+                                uploader="uploader"
+                                accept="image/*"
+                            />
+
+                            <label ng-show="imageWidth">
+                                <input type="checkbox" data-ng-model="widthFilter"></input>
+                                <span translate translate-values="{{translateImageWidth}}">gallery.filter</span>
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group"  ng-show="uploader.progress">
+                        <div class="col-sm-3 col-sm-offset-1" ng-show="uploader.progress">
+                            <button type="button" class="btn btn-danger" ng-click='uploader.cancelAll()'>Annuler le téléversement</button>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }" style="width: 100%;"></div>
+                        </div>
+
+                        <!--  Bouton pour annuler l'upload -->
+
+                    </div>
+
+                </form>
+
+
+    </div>
+
+</div>
+
+<div class="modal-body row">
+
+
+    <div class="container col-md-12">
+
+
+        <div class="col-md-4">
+
+            <ng-tree data-first-node="tree" data-select-node="selectNode" />
+
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="galleryImage" ng-switch="filetype">
+
+                <div ng-switch-when="image">
+                    <p class="container">
+
+                        <div class="col-xs-12 col-sm-6 col-md-4 imageBox" ng-repeat='image in selectedImages | filter : imageFilter'>
+
+                            <!--
+                            <img tooltip="{{'generic.name' | translate }} {{image.name}} {{'generic.size' | translate }} : {{image.size | fileSize}}   {{ 'generic.dimension' | translate }} : {{image.width}}x{{image.height}}" src="{{image.url}}" class="img-thumbnail galleryImage" ng-click='chooseFile(image)' />
+                            -->
+
+                            <img tooltip="{{image.name}} {{image.width}}x{{image.height}} {{image.size | fileSize}}" src="{{image.url}}" class="img-thumbnail galleryImage" ng-click='chooseFile(image)'/>
+
+                        </div>
+
+                    </p>
+                </div>
+
+                <div class="container"  ng-switch-when="video">
+
+                    <div class="col-xs-12 imageBox" ng-repeat='image in selectedImages'>
+
+                            <myvideo src="image.url" />
+                            <h4>
+                                <a ng-click='chooseFile(image)' class="pointer">
+                                    {{image.name}}
+                                </a>
+                            </h4>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" data-ng-click="cancel()" translate>generic.cancel</button>
+</div>

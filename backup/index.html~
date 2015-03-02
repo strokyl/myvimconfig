@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr_FR" ng-app="Ngwis" ng-controller="GlobalCtrl">
+<html ng-app="Ngwis" ng-controller="GlobalCtrl">
 <head>
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <meta charset="utf-8">
@@ -15,10 +15,11 @@
 <script src="js/libs/angular-1.2.js"></script>
 <script src="js/libs/angular-route.min.js"></script>
 <script src="js/libs/angular-resource-1.1.5.js"></script>
-<script src="js/libs/angular-translate-1.1.1.js"></script>
+<script src="js/libs/angular-translate.min.js"></script>
 <script src="js/libs/ui-bootstrap-tpls-0.12.0.min.js"></script>
 <script src="js/libs/bootstrap-filestyle.min.js"></script>
 <script src="js/libs/recursion.js"></script>
+<script src="js/libs/ng-table.min.js"></script>
 
 <!--  TinyMCE -->
 <script type="text/javascript" src="js/libs/tinymce4/tinymce.min.js"></script>
@@ -29,11 +30,13 @@
 
 <!-- Angular pack langues -->
 <script src="js/ngwis/i18n/ngwisfr_FR.js"></script>
+<script src="js/ngwis/i18n/ngwisen_EN.js"></script>
 
 <!-- Angular : application -->
 <script src="js/ngwis/application.js"></script>
 <!-- Angular : services -->
 <script src="js/ngwis/services/services.js"></script>
+<script src="js/ngwis/services/actuform.js"></script>
 
 
 <!-- Angular : contrôleurs -->
@@ -48,6 +51,7 @@
 <script src="js/ngwis/controllers/GalleryCtrl.js"></script>
 
 <!-- Angular : directives -->
+<script src="js/ngwis/filter.js"></script>
 <script src="js/ngwis/directives/directives.js"></script>
 <script src="js/ngwis/directives/security.js"></script>
 <script src="js/ngwis/directives/menu.js"></script>
@@ -55,14 +59,19 @@
 <script src="js/ngwis/directives/mydatepicker.js"></script>
 <script src="js/ngwis/directives/myform.js"></script>
 <script src="js/ngwis/directives/prettyFileInput.js"></script>
+<script src="js/ngwis/directives/myvideo.js"></script>
 
+<!--  Video js -->
+<link href="js/libs/video-js/video-js.css" rel="stylesheet" type="text/css">
+<script src="js/libs/video-js/video.js"></script>
+<script type="text/javascript"> videojs.options.flash.swf = "js/libs/video-js/video-js.swf"; </script>
 
 <!-- angularFileUpload -->
 <script type="text/javascript" src="js/libs/angular-file-upload.min.js"></script>
 
 <!-- CSS -->
 <!-- <link rel="stylesheet" href="js/libs/bootstrap/css/bootstrap-theme.css"> -->
-<link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css"/>
+<!-- <link rel="stylesheet" href="css/jquery-ui-1.10.0.custom.css"/> -->
 <!-- <link rel="stylesheet" href="css/master.css"> -->
 <!-- <link rel="stylesheet" href="css/component_banner.css" /> -->
 <!-- <link rel="stylesheet" href="css/component_buttons.css"> -->
@@ -70,9 +79,19 @@
 <!-- <link rel="stylesheet" href="css/component_responsive_menu.css"> -->
 <!-- <link rel="stylesheet" href="css/composant_action_menu.css" /> -->
 <!-- <link rel="stylesheet" href="css/ngwis.css"> -->
-<link rel="stylesheet" href="js/libs/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" href="css/gallery.css">
-<link rel="stylesheet" href="css/myactu.css">
+<!-- <link rel="stylesheet" href="js/libs/bootstrap/css/bootstrap.css"> -->
+<!-- <link rel="stylesheet" href="css/gallery.css"> -->
+<!-- <link rel="stylesheet" href="css/myactu.css"> -->
+<link href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link rel="stylesheet" href="css/ng-table.min.css"> 
+<link rel="stylesheet" type="text/css" href="assets/app_components/css/general/general.css">
+<link rel="stylesheet" type="text/css" href="assets/app_components/css/site.css">
+<link rel="stylesheet" type="text/css" href="assets/app_components/css/index.css">
+
+<link href="assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+
 
 <title translate>generic.title</title>
 

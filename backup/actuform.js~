@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('Ngwis.Services').
-factory('ActuForm', function () {
+factory('ActuForm', ['FileService', function (FileService) {
 
-    var lang = [{id:'fr', lang:'Français'}, {id:'en', lang: 'Anglais'}];
+    var lang = [{id:'fr', lang:'generic.french'}, {id:'en', lang: 'generic.english'}];
 
 	var capitalize = function(s) {
 	    return s[0].toUpperCase() + s.slice(1);
@@ -22,73 +22,142 @@ factory('ActuForm', function () {
         return field;
     };
 
-    var titre = { id : buildLangId('titre'), label : "Titre", type: "text" };
+    var titre = { id : buildLangId('titre'), label : "actu.title", type: "text" };
 
-    var actuDate = { id : "actuDate", label : "Date", type : "date" };
+    var actuDate = { id : "actuDate", label : "generic.date", type : "date" };
 
-    var actuTheme= { id: "actuTheme", label: "Theme", type : "liste" }; 
+    var theme = function(id, label, choices) {
+        return{ id: id, label: label, type : "liste", choices : choices}; 
+    };
 
-    var unitSite = { id: "unitSite", label: "Unit site", type : "liste" };
+    var unitSite = function(id, choices) {
+        return { id: id, label: "actu.unitSite", type : "liste" , choices : choices};
+    };
 
-    var texteRiche = { id : buildLangId("texteRiche"), label : "Corps", type : "html" }; 
+    var texteRiche = { id : buildLangId("texteRiche"), label : "actu.body", type : "html" }; 
 
-    var image = { id : buildLangId("image"), label : "Image", type : "image" };
+    var advanced = { id : "advanced", label : "actu.advancedMode", type : "checkbox" };
 
-    var advanced = { id : "advanced", label : "Mode avancé", type : "checkbox" };
-
-    var chapeau  = { id : buildLangId("chapeau"), label : "Chapeau",
-        displayIf : "advanced",
+    var chapeau  = { id : buildLangId("chapeau"), label : "actu.hat",
         type : "textarea"
     };
 
-    var une = { id : "une", label:  "Une", type : "checkbox", displayIf : "advanced" };
+    var chapeauMiddlepack = angular.copy(chapeau);
+    chapeauMiddlepack.displayIf = "advanced";
 
-    var hot = { id : "hot", label : "Hot", type : "checkbox", displayIf : "advanced" };
+    var une = { id : "une", label:  "actu.one", type : "checkbox", displayIf : "advanced" };
 
+    var hot = { id : "hot", label : "actu.hot", type : "checkbox", displayIf : "advanced" };
 
-    var actuFile = { id : "actuFile", label : "Nom de fichier", type : "text" };
+    var actuFile = { id : "actuFile", label : "actu.fileName", type : "text" };
+
+    var lecteur = function(choices) {
+        return { id : "lecteur", label : "actu.reader", type : "liste", choices : choices };
+    };
+
+    var mail = function(choices) {
+        return { id : "mail", label : "actu.sendMail", type : "liste", choices : choices };
+    };
+
 
 
     return {
-        getForm : function(type, newActu, themeChoice, unitSiteChoice) {
+        getForm : function(newActu, branche) {
             var form; 
-            
-            var _unitSite = angular.copy(unitSite);
-            var _actuTheme = angular.copy(actuTheme);
 
-            _unitSite.choices = unitSiteChoice;
-            _actuTheme.choices = themeChoice;
+            var brancheName = branche.brancheName;
 
-            console.log("type", type);
+            var type = branche["@type"];
+
+            var _unitSite = unitSite(branche.unitSites);
+
+
+            var images = FileService.getImages({brancheName:branche.brancheName});
+
+            var image = {
+                id : buildLangId("image"),
+                brancheName : brancheName,
+                label : "actu.picture",
+                type : "gallery",
+                files : images,
+                filetype : "image"
+            };
+
             if(type === "middlePack") {
+
+                image.imageWidth = 220;
 
                 form = {
                     lang : lang,
                     fields : [
                         titre,
                         actuDate,
-                        _actuTheme,
+                        theme("actuTheme", "actu.theme", branche.themes),
                         _unitSite,
                         texteRiche,
                         image,
                         advanced,
-                        chapeau
+                        chapeauMiddlepack,
+                        une,
+                        hot
                     ]
                 };
 
             } else if (type === "ITComm") {
 
+                var _mail  = mail(branche.mails);
+
+                var _lecteur = lecteur(branche.lecteurs);
+
+                image.imageWidth = 480;
+
+                var videos = FileService.getVideos({brancheName:branche.brancheName});
+                var video = {
+                    id : buildLangId("video"),
+                    brancheName : brancheName,
+                    label : "actu.video",
+                    type : "gallery",
+                    files : videos,
+                    filetype : "video"
+                };
+
+                var imageSlider = {
+                    id : buildLangId("imageSlider"),
+                    brancheName : brancheName,
+                    label : "actu.sliderPicture",
+                    type : "gallery",
+                    files : images,
+                    filetype : "image",
+                    imageWidth : 230,
+                };
+
+                var imagePortail = {
+                    id : buildLangId("imagePortail"),
+                    brancheName : brancheName,
+                    label : "actu.portailPicture",
+                    type : "gallery",
+                    files : images,
+                    imageWidth : 230,
+                    filetype : "image"
+                };
+
                 form = {
                     lang : lang,
                     fields : [
                         titre,
                         actuDate,
-                        _actuTheme,
+                        theme("theme1", "actu.theme1", branche.themes),
+                        theme("theme2", "actu.theme2", branche.themes),
+                        theme("theme3", "actu.theme3", branche.themes),
                         _unitSite,
+                        chapeau,
                         texteRiche,
+                        video,
                         image,
-                        advanced,
-                        chapeau
+                        imageSlider,
+                        imagePortail,
+                        _lecteur,
+                        _mail
                     ]
                 };
 
@@ -101,5 +170,6 @@ factory('ActuForm', function () {
             return form;
         }
     };
-});
+
+}]);
 

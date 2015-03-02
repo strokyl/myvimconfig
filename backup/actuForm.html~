@@ -1,10 +1,10 @@
 <div page-access-keys="AK_ADMIN" class="container">
     <div ng-show="message.length" class="bg-danger">{{message}}</div>
     <br>
-    <p ng-hide="actu" class="has-error">Actualité introuvable</p>
+    <p ng-hide="actu" class="has-error" translate>actuForm.error.notfound</p>
     
     <h1 ng-if="!createActu">{{actu.actuFile}}.dcr</h1>
-    <h1 ng-if="createActu">Nouvelle actualité</h1>
+    <h1 ng-if="createActu" translate>actuForm.newActu</h1>
     
 
 
@@ -14,18 +14,16 @@
         <myform
             data-form='form'
             data-resource='actu'
-            data-images="images"
-            data-branche-name="brancheName"
         />
 
         <!--  Bouton annuler et supprimer -->
         <div class="form-group">
             <div class="col-sm-4 col-sm-offset-8">
 
-                <button type="submit" class="btn btn-primary">Sauvegarder</button>
-                <button type="button" class="btn btn-primary" ng-click='apercu()'>Apercu</button>
-                <button type="button" class="btn btn-primary" ng-click='publish()'>Publier</button>
-                <button type="reset" class="btn btn-danger" ng-click='cancel()'>Annuler</button>
+                <button type="submit" translate class="btn btn-primary">generic.save</button>
+                <button type="button" translate class="btn btn-primary" ng-click='apercu()'>actuForm.apercu</button>
+                <button type="button" translate class="btn btn-primary" ng-click='publish()'>actuForm.publish</button>
+                <button type="reset" translate class="btn btn-danger" ng-click='cancel()'>generic.cancel</button>
             
             </div>
         </div>
