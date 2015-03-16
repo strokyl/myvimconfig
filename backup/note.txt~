@@ -1,3 +1,0 @@
-FileRepository.java ligne 97 :
-ligne commenté sinon elle provoque un beug lors de l'insertion d'une image. Il
-faudra corriger le beug et la decommenter
