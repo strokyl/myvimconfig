@@ -16,9 +16,6 @@
 [submodule "bundle/command-t"]
 	path = bundle/command-t
 	url = https://github.com/wincent/Command-T.git
-[submodule "bundle/snapmate"]
-	path = bundle/snapmate
-	url = https://github.com/msanders/snipmate.vim.git
 [submodule "bundle/bufexeplorer"]
 	path = bundle/bufexeplorer
 	url = https://github.com/jlanzarotta/bufexplorer.git
@@ -73,3 +70,12 @@
 [submodule "bundle/exchange"]
 	path = bundle/exchange
 	url = https://github.com/tommcdo/vim-exchange.git
+[submodule "bundle/ultisnips"]
+	path = bundle/ultisnips
+	url = https://github.com/SirVer/ultisnips.git
+[submodule "bundle/vim-snippets"]
+	path = bundle/vim-snippets
+	url = https://github.com/honza/vim-snippets.git
+[submodule "bundle/matchit"]
+	path = bundle/matchit
+	url = https://github.com/tmhedberg/matchit

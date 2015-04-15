@@ -52,7 +52,7 @@ imap <C-e> <esc>$i<right>
 " map CTRL-A to beginning-of-line (insert mode)
 imap <C-a> <esc>0i
 
-command E :Explore
+command! E :Explore
 let g:netrw_liststyle=3
 " Show invisible character
 " set list
