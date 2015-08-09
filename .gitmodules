@@ -73,3 +73,9 @@
 [submodule "bundle/exchange"]
 	path = bundle/exchange
 	url = https://github.com/tommcdo/vim-exchange.git
+[submodule "bundle/youcompleteme"]
+	path = bundle/youcompleteme
+	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule "bundle/javascript-libraries-syntax"]
+	path = bundle/javascript-libraries-syntax
+	url = https://github.com/othree/javascript-libraries-syntax.vim.git

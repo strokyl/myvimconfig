@@ -1,4 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_cnt =4
 let g:netrw_dirhist_1='/cygdrive/c/git/myactu/myactu/myactuWeb/src/main/webapp/js/ngwis'
 let g:netrw_dirhist_2='/cygdrive/c/git/myactu/myactu/myactuWeb/src/main/webapp/js/ngwis/directives'
+let g:netrw_dirhist_3='/Users/strokyl/textaling'
+let g:netrw_dirhist_4='/Users/strokyl/.vim'
