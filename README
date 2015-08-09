@@ -21,3 +21,6 @@ Add a plugin :
 
 Upgrading all bundled plugins :
     git submodule foreach git pull origin master
+
+After a git pull :
+    git submodule update --init --recursive
