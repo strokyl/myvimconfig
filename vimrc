@@ -70,3 +70,5 @@ omap <Leader><Leader><Leader> <Plug>(easymotion-Jumptoanywhere)
 
 nmap <Leader>o o<ESC>
 nmap <Leader>O O<ESC>
+let g:UltiSnipsExpandTrigger="<c-tab>"
+let g:UltiSnipsExpandTrigger="<c-s-tab>"
