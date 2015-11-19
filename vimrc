@@ -61,7 +61,8 @@ let g:netrw_liststyle=3
 set backupdir=~/.vim/backup
 set noswapfile
 
-map <Leader>t :CtrlP<CR>
+let g:ctrlp_map = '<Leader>t'
+let g:ctrlp_cmd = 'CtrlP'
 
 " EasyMap
 nmap <Leader><Leader><Leader> <Plug>(easymotion-jumptoanywhere)
