@@ -91,3 +91,6 @@
 [submodule "bundle/tern"]
 	path = bundle/tern
 	url = https://github.com/ternjs/tern_for_vim
+[submodule "bundle/table-mode"]
+	path = bundle/table-mode
+	url = https://github.com/dhruvasagar/vim-table-mode.git
