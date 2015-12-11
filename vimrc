@@ -62,9 +62,10 @@ let g:ctrlp_map = '<Leader>t'
 let g:ctrlp_cmd = 'CtrlP'
 
 " EasyMap
-nmap <Leader><Leader><Leader> <Plug>(easymotion-jumptoanywhere)
-xmap <Leader><Leader><Leader> <Plug>(easymotion-Jumptoanywhere)
-omap <Leader><Leader><Leader> <Plug>(easymotion-Jumptoanywhere)
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap s <Plug>(easymotion-s)
+map sj <Plug>(easymotion-j)
+map sk <Plug>(easymotion-k)
 
 nmap <Leader>o o<ESC>
 nmap <Leader>O O<ESC>
