@@ -94,3 +94,6 @@
 [submodule "bundle/table-mode"]
 	path = bundle/table-mode
 	url = https://github.com/dhruvasagar/vim-table-mode.git
+[submodule "bundle/jshint"]
+	path = bundle/jshint
+	url = https://github.com/wookiehangover/jshint.vim
