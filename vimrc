@@ -69,5 +69,4 @@ map sk <Plug>(easymotion-k)
 
 nmap <Leader>o o<ESC>
 nmap <Leader>O O<ESC>
-let g:UltiSnipsExpandTrigger="<c-tab>"
-let g:UltiSnipsExpandTrigger="<c-s-tab>"
+let g:UltiSnipsExpandTrigger="<c-j>"
