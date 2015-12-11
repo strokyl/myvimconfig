@@ -23,7 +23,6 @@ vnoremap / /\v
 set ignorecase
 set smartcase
 nnoremap <tab> %
-set colorcolumn=85
 vnoremap <tab> %:
 set ruler
 set laststatus=2
@@ -39,8 +38,6 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 let g:rainbow_active = 1
-
-au FileType javascript call JavaScriptFold()
 
 imap <C-h> <esc>i
 imap <C-j> <down>
