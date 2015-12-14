@@ -97,3 +97,6 @@
 [submodule "bundle/jshint"]
 	path = bundle/jshint
 	url = https://github.com/wookiehangover/jshint.vim
+[submodule "bundle/nerdtree"]
+	path = bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git

@@ -70,3 +70,5 @@ map sk <Plug>(easymotion-k)
 nmap <Leader>o o<ESC>
 nmap <Leader>O O<ESC>
 let g:UltiSnipsExpandTrigger="<c-j>"
+
+map <Leader>e <plug>NERDTreeTabsToggle<CR>
