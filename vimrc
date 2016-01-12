@@ -72,3 +72,5 @@ nmap <Leader>O O<ESC>
 let g:UltiSnipsExpandTrigger="<c-j>"
 
 map <Leader>e <plug>NERDTreeTabsToggle<CR>
+
+set t_Co=256
