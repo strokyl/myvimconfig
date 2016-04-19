@@ -1,15 +1,67 @@
 snippet f "Anonymous function (js)" i
-function ($0) {
-  $1
+function($1) {
+  $0
 }
 endsnippet
 
 snippet fu "Anonymous function without arg (js)" i
-function () {
+function() {
   $0
 }
 endsnippet
 
 snippet bi "bind (js)" i
 .bind(null, $0)
+endsnippet
+
+snippet desc "describe (js)"
+describe('$1', function() {
+  $0
+});
+endsnippet
+
+snippet it "it (js)"
+it('$1', function() {
+  $0
+});
+endsnippet
+
+snippet bfe "beforeEach (js)"
+beforeEach(function() {
+  $0
+});
+endsnippet
+
+snippet calledWith "to.have.been.calledWith (js)"
+expect($1).to.have.been.calledWith($2);
+endsnippet
+
+snippet d= "to.deep.equal (js)"
+expect($1).to.deep.equal($2);
+endsnippet
+
+snippet calledOnce "to.have.been.calledOnce (js)"
+expect($1).to.have.been.calledOnce;
+endsnippet
+
+snippet betrue "to.be.true (js)"
+expect($1).to.be.true;
+endsnippet
+
+snippet befalse "to.be.false (js)"
+expect($1).to.be.false;
+endsnippet
+
+snippet stub "sinon.stub().returns (js)"
+sinon.stub().returns($1);
+endsnippet
+
+snippet __= "data = _data_;"
+$1 = _$1_;
+endsnippet
+
+snippet afe "afterEach (js)"
+afterEach(function() {
+  $0
+});
 endsnippet

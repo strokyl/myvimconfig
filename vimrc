@@ -63,9 +63,13 @@ let g:ctrlp_cmd = 'CtrlP'
 
 " EasyMap
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap <Leader>b :CtrlPBuffer<Enter>
 nmap s <Plug>(easymotion-s)
+vmap s <Plug>(easymotion-s)
 map sj <Plug>(easymotion-j)
+vmap sj <Plug>(easymotion-j)
 map sk <Plug>(easymotion-k)
+vmap sk <Plug>(easymotion-k)
 
 nmap <Leader>o o<ESC>
 nmap <Leader>O O<ESC>
@@ -74,3 +78,17 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 map <Leader>e <plug>NERDTreeTabsToggle<CR>
 
 set t_Co=256
+
+" Removes trailing spaces
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
+
+let g:syntastic_javascript_checkers = ['eslint', 'jshint', 'jscs']
+let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
+      \ --ignore .git
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/*.pyc"
+      \ -g ""'
