@@ -115,3 +115,6 @@
 [submodule "bundle/vim-easyoperator-line"]
 	path = bundle/vim-easyoperator-line
 	url = https://github.com/haya14busa/vim-easyoperator-line.git
+[submodule "bundle/elm"]
+	path = bundle/elm
+	url = https://github.com/lambdatoast/elm.vim.git
